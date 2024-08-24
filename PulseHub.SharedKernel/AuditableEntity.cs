@@ -1,0 +1,8 @@
+﻿namespace PulseHub.SharedKernel;
+
+public class AuditableEntity
+{
+    public DateTimeOffset CreatedAtUtc { get; set; }
+
+    public DateTimeOffset ModidiedAtUtc { get; set; }
+}

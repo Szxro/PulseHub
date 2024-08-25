@@ -1,14 +1,35 @@
 ﻿using PulseHub.SharedKernel;
+using System.Text.RegularExpressions;
 
 namespace PulseHub.Domain.ValueObjects;
 
 public class Email : ValueObject
 {
+    public const string EmailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
     public string Value { get; }
 
-    public Email(string value)
+    private Email(string value)
     {
         Value = value;
+    }
+
+    public static bool IsValid(string email,out Result<Email>? validEmail)
+    {
+        validEmail = null;
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+        {
+            return false;
+        }
+
+        if (!Regex.IsMatch(email,EmailPattern,RegexOptions.CultureInvariant))
+        {
+            return false;
+        }
+
+        validEmail = Result<Email>.Success(new Email(email));
+        return true;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PulseHub.Domain", "PulseHub.Domain\PulseHub.Domain.csproj", "{D0957ACE-C36A-443A-BE8A-2A0CD8F48B91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PulseHub.SharedKernel", "PulseHub.SharedKernel\PulseHub.SharedKernel.csproj", "{66A36693-C8E0-4299-8761-2A5F9E6840CD}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0957ACE-C36A-443A-BE8A-2A0CD8F48B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0957ACE-C36A-443A-BE8A-2A0CD8F48B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0957ACE-C36A-443A-BE8A-2A0CD8F48B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0957ACE-C36A-443A-BE8A-2A0CD8F48B91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A36693-C8E0-4299-8761-2A5F9E6840CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A36693-C8E0-4299-8761-2A5F9E6840CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A36693-C8E0-4299-8761-2A5F9E6840CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A36693-C8E0-4299-8761-2A5F9E6840CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

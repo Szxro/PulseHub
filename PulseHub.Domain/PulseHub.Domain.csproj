@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PulseHub.SharedKernel\PulseHub.SharedKernel.csproj" />
+  </ItemGroup>
+
 </Project>

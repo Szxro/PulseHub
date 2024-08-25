@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PulseHub.Domain.Entities;
+using PulseHub.Infrastructure.Extensions;
+using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.Infrastructure.Persistence;
 
@@ -17,6 +19,8 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+        modelBuilder.ApplyGlobalQueryFilter<ISoftDelete>(entity => !entity.IsDeleted);
 
         base.OnModelCreating(modelBuilder);
     }

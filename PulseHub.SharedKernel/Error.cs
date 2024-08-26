@@ -21,6 +21,8 @@ public sealed class Error
 
     public static Error Validation = new("Validation.Error","One or more validation error occurred",ErrorType.Validation);
 
+    public static Error ValidationFailure(string errorDescription) => new("Validation.Error",errorDescription,ErrorType.Validation); 
+
     public static Error NotFound(string errorDescription) => new("NotFound.Error",errorDescription,ErrorType.NotFound);
 
     public static Error Conflit(string errorDescription) => new("Conflit.Error",errorDescription,ErrorType.Conflit);

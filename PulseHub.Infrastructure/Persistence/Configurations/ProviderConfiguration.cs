@@ -15,12 +15,18 @@ public class ProviderConfiguration : IEntityTypeConfiguration<Provider>
         builder.HasData(
             new Provider
             {
+                Id = 1,
                 Name = "Discord",
-                Description = DiscordDescription
+                Description = DiscordDescription,
+                CreatedAtUtc = DateTimeOffset.UtcNow,
+                ModifiedAtUtc = DateTimeOffset.UtcNow,
             },
             new Provider {
+                Id = 2,
                 Name = "Telegram",
-                Description = TelegramDescription
+                Description = TelegramDescription,
+                CreatedAtUtc = DateTimeOffset.UtcNow,
+                ModifiedAtUtc = DateTimeOffset.UtcNow,
             }
          );
     }

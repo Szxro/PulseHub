@@ -10,11 +10,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasIndex(x => x.Username).IsUnique();
 
-        builder.OwnsOne(x => x.Email, options =>
+        builder.OwnsOne(x => x.Email, emailOptions =>
         {
-            options.HasIndex(x => x.Value).IsUnique();
+            emailOptions.HasIndex(x => x.Value).IsUnique();
 
-            options.Property(x => x.Value).HasColumnName("email");
+            emailOptions.Property(x => x.Value).HasColumnName("email");
         });
     }
 }

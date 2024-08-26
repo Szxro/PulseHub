@@ -1,10 +1,13 @@
+using PulseHub.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 {
     // Add services to the container.
-
+    builder.Services.AddInfrastructureLayer();
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Configuration.AddUserSecrets<Program>(optional:false,reloadOnChange:true);
 }
 
 

@@ -1,8 +1,10 @@
+using PulseHub.Application;
 using PulseHub.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     // Add services to the container.
+    builder.Services.AddApplicationLayer();
     builder.Services.AddInfrastructureLayer(builder.Environment);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();

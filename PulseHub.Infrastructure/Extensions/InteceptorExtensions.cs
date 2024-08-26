@@ -9,6 +9,8 @@ public static partial class InfrastructureExtensions
     {
         services.AddSingleton<AuditableEntityInterceptor>();
 
+        services.AddSingleton<DomainEventInterceptor>();
+
         return services;
     }
 }

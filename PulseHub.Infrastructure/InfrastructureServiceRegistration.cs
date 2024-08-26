@@ -20,10 +20,6 @@ public static class InfrastructureServiceRegistration
 
         services.AddInterceptors();
 
-        services.AddServices();
-
-        services.AddWorkers();
-
         services.AddDbContext<AppDbContext>((provider,options) => 
         {
             DatabaseOptions databaseOptions = provider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
@@ -34,6 +30,7 @@ public static class InfrastructureServiceRegistration
 
             })
             .AddInterceptors(provider.GetRequiredService<AuditableEntityInterceptor>())
+            .AddInterceptors(provider.GetRequiredService<DomainEventInterceptor>())
             .UseSnakeCaseNamingConvention();
 
             if (environment.IsDevelopment())
@@ -42,6 +39,12 @@ public static class InfrastructureServiceRegistration
                 options.EnableSensitiveDataLogging(databaseOptions.EnableSensitiveDataLogging);
             }
         });
+
+        services.AddChannels();
+
+        services.AddServices();
+
+        services.AddWorkers();
 
         return services;
     }

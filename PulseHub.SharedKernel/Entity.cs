@@ -1,4 +1,5 @@
 ﻿using PulseHub.SharedKernel.Contracts;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PulseHub.SharedKernel;
 
@@ -9,4 +10,22 @@ public class Entity : AuditableEntity, IEntity, ISoftDelete
     public bool IsDeleted { get; set;    }
 
     public DateTimeOffset DeletedAtUtc { get; set; } = new DateTime(1999, 01, 01, 01, 00, 00);
+
+    [NotMapped]
+    public List<DomainEvent> domainEvents = new List<DomainEvent>();
+
+    public void AddEvent(DomainEvent @event)
+    {
+        domainEvents.Add(@event);
+    }
+
+    public void RemoveEvent(DomainEvent @event)
+    {
+        domainEvents.Remove(@event);
+    }
+
+    public void ClearEvents()
+    {
+        domainEvents.Clear();
+    }
 }

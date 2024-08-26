@@ -2,7 +2,7 @@
 
 namespace PulseHub.SharedKernel;
 
-public class Entity : AuditableEntity, ISoftDelete
+public class Entity : AuditableEntity, IEntity, ISoftDelete
 {
     public int Id { get; set; }
 

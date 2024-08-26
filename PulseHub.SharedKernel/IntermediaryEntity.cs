@@ -1,6 +1,8 @@
-﻿namespace PulseHub.SharedKernel;
+﻿using PulseHub.SharedKernel.Contracts;
 
-public class IntermediaryEntity : AuditableEntity
+namespace PulseHub.SharedKernel;
+
+public class IntermediaryEntity : AuditableEntity, IEntity
 {
     public int Id { get; set; }
 }

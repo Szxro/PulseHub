@@ -8,5 +8,5 @@ public class Entity : AuditableEntity, ISoftDelete
 
     public bool IsDeleted { get; set;    }
 
-    public DateTimeOffset DeletedAtUtc { get; set; }
+    public DateTimeOffset DeletedAtUtc { get; set; } = new DateTime(1999, 01, 01, 01, 00, 00);
 }

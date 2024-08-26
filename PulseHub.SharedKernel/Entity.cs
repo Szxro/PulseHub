@@ -11,8 +11,10 @@ public class Entity : AuditableEntity, IEntity, ISoftDelete
 
     public DateTimeOffset DeletedAtUtc { get; set; } = new DateTime(1999, 01, 01, 01, 00, 00);
 
+    private List<DomainEvent> domainEvents = new List<DomainEvent>();
+
     [NotMapped]
-    public List<DomainEvent> domainEvents = new List<DomainEvent>();
+    public IReadOnlyCollection<DomainEvent> DomainEvent => domainEvents;
 
     public void AddEvent(DomainEvent @event)
     {

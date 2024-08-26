@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PulseHub.Domain\PulseHub.Domain.csproj" />
+    <ProjectReference Include="..\PulseHub.Application\PulseHub.Application.csproj" />
   </ItemGroup>
 
 </Project>

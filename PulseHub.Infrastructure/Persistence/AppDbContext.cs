@@ -2,6 +2,7 @@
 using PulseHub.Domain.Entities;
 using PulseHub.Infrastructure.Extensions;
 using PulseHub.SharedKernel.Contracts;
+using DomainApplication = PulseHub.Domain.Entities.Application;
 
 namespace PulseHub.Infrastructure.Persistence;
 
@@ -31,7 +32,7 @@ public class AppDbContext : DbContext
 
     public DbSet<UserCredentials> UserCredentials => Set<UserCredentials>();
 
-    public DbSet<Application> Application => Set<Application>();
+    public DbSet<DomainApplication> Application => Set<DomainApplication>();
 
     public DbSet<Provider> Provider => Set<Provider>();
 

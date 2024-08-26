@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PulseHub.SharedKernel", "Pu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PulseHub.Infrastructure", "PulseHub.Infrastructure\PulseHub.Infrastructure.csproj", "{CB0C117F-E2E0-4605-978B-E08E170989F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseHub.Api", "PulseHub.Api\PulseHub.Api.csproj", "{FE40E7ED-9144-4E3C-9E1C-55F95708D452}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PulseHub.Api", "PulseHub.Api\PulseHub.Api.csproj", "{FE40E7ED-9144-4E3C-9E1C-55F95708D452}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseHub.Application", "PulseHub.Application\PulseHub.Application.csproj", "{AC37556C-14AD-4DF7-BC76-54F96F398BB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FE40E7ED-9144-4E3C-9E1C-55F95708D452}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE40E7ED-9144-4E3C-9E1C-55F95708D452}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE40E7ED-9144-4E3C-9E1C-55F95708D452}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC37556C-14AD-4DF7-BC76-54F96F398BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC37556C-14AD-4DF7-BC76-54F96F398BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC37556C-14AD-4DF7-BC76-54F96F398BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC37556C-14AD-4DF7-BC76-54F96F398BB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

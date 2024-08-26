@@ -4,5 +4,5 @@ public class AuditableEntity
 {
     public DateTimeOffset CreatedAtUtc { get; set; }
 
-    public DateTimeOffset ModidiedAtUtc { get; set; }
+    public DateTimeOffset ModifiedAtUtc { get; set; }
 }

@@ -18,15 +18,16 @@ public class ProviderConfiguration : IEntityTypeConfiguration<Provider>
                 Id = 1,
                 Name = "Discord",
                 Description = DiscordDescription,
-                CreatedAtUtc = DateTimeOffset.UtcNow,
-                ModifiedAtUtc = DateTimeOffset.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow,
+                ModifiedAtUtc = DateTime.UtcNow,
             },
-            new Provider {
+            new Provider
+            {
                 Id = 2,
                 Name = "Telegram",
                 Description = TelegramDescription,
-                CreatedAtUtc = DateTimeOffset.UtcNow,
-                ModifiedAtUtc = DateTimeOffset.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow,
+                ModifiedAtUtc = DateTime.UtcNow,
             }
          );
     }

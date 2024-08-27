@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using PulseHub.SharedKernel;
-using MediatR;
 using PulseHub.Infrastructure.Channels;
 
 namespace PulseHub.Infrastructure.Persistence.Interceptors;

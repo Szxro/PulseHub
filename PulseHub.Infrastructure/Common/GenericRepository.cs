@@ -9,7 +9,7 @@ namespace PulseHub.Infrastructure.Common;
 public abstract class GenericRepository<TEntity>
     where TEntity : class, IEntity
 {
-    private readonly AppDbContext _dbContext;
+    protected readonly AppDbContext _dbContext;
 
     protected GenericRepository(AppDbContext dbContext)
     {
@@ -46,20 +46,26 @@ public abstract class GenericRepository<TEntity>
         _dbContext.Set<TEntity>().UpdateRange(entities);
     }
 
-    public async Task<TEntity?> GetById(int id)
+    public async Task<TEntity?> GetById(int id,CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync();
+        return await _dbContext.Set<TEntity>().Where(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int?> BulkDelete(Expression<Func<TEntity,bool>> filter)
+    public async Task<int?> RemoveById(int id,CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<TEntity>().Where(filter).ExecuteDeleteAsync();
+        return await _dbContext.Set<TEntity>().Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task<int?> BulkDelete(Expression<Func<TEntity,bool>> filter,CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<TEntity>().Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task<int?> BulkUpdate(
         Expression<Func<TEntity, bool>> filter,
-        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> properties)
+        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> properties,
+        CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<TEntity>().Where(filter).ExecuteUpdateAsync(properties);
+        return await _dbContext.Set<TEntity>().Where(filter).ExecuteUpdateAsync(properties,cancellationToken);
     }
 }

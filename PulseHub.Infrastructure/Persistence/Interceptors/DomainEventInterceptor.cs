@@ -35,7 +35,7 @@ public class DomainEventInterceptor : SaveChangesInterceptor
                                                     .SelectMany(entity => entity.DomainEvent)
                                                     .ToList();
 
-        if (entitiesEvents.Any())
+        if (!entitiesEvents.Any())
         {
             return;
         }

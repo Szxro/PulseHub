@@ -9,7 +9,7 @@ public class Entity : AuditableEntity, IEntity, ISoftDelete
 
     public bool IsDeleted { get; set;    }
 
-    public DateTimeOffset DeletedAtUtc { get; set; } = new DateTime(1999, 01, 01, 01, 00, 00);
+    public DateTime DeletedAtUtc { get; set; } = DateTime.MinValue;
 
     private List<DomainEvent> domainEvents = new List<DomainEvent>();
 

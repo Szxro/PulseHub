@@ -13,6 +13,8 @@ public static partial class InfrastructureExtensions
 
         services.AddScoped<IDatabaseInitializerService, DatabaseInitializerService>();
 
+        services.AddTransient<IHashingService, HashingService>();
+
         services.AddTransient<IDomainEventDispatcherService, DomainEventDispatcherService>();
        
         return services;

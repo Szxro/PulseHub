@@ -12,6 +12,8 @@ public static partial class InfrastructureExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IDatabaseInitializerService, DatabaseInitializerService>();
+
+        services.AddTransient<IDomainEventDispatcherService, DomainEventDispatcherService>();
        
         return services;
     }

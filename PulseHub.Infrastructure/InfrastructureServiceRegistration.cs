@@ -46,6 +46,8 @@ public static class InfrastructureServiceRegistration
 
         services.AddWorkers();
 
+        services.AddRepositories();
+
         return services;
     }
 }

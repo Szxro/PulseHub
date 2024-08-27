@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using PulseHub.Infrastructure.Options.Database;
+using PulseHub.Infrastructure.Options.Hashing;
 using PulseHub.Infrastructure.Validators;
 using PulseHub.SharedKernel.Contracts;
 
@@ -12,6 +13,9 @@ public static partial class InfrastructureExtensions
     {
         services.ConfigureOptions<DatabaseOptionsSetup>()
                 .AddFluentValidator<DatabaseOptions>();
+
+        services.ConfigureOptions<HashingOptionsSetup>()
+                .AddFluentValidator<HashingOptions>();
 
         return services;
     }

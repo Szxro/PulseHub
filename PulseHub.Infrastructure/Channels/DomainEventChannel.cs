@@ -30,7 +30,7 @@ public class DomainEventChannel
         {
             if (_channel.Writer.TryWrite(@event))
             {
-                _logger.LogInformation("The domain event {event} was enqueue into the channel",typeof(DomainEvent).Name);
+                _logger.LogInformation("The domain event {event} was enqueue into the channel",@event.GetType().Name);
 
                 return true;
             }

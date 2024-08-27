@@ -30,13 +30,13 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
         {
             if (entity.State == EntityState.Added)
             {
-                SetCurrentProperty(entity, nameof(AuditableEntity.CreatedAtUtc), DateTimeOffset.UtcNow);
-                SetCurrentProperty(entity, nameof(AuditableEntity.ModifiedAtUtc), DateTimeOffset.UtcNow);
+                SetCurrentProperty(entity, nameof(AuditableEntity.CreatedAtUtc), DateTime.UtcNow);
+                SetCurrentProperty(entity, nameof(AuditableEntity.ModifiedAtUtc), DateTime.UtcNow);
             }
 
             if (entity.State == EntityState.Modified)
             {
-                SetCurrentProperty(entity, nameof(AuditableEntity.ModifiedAtUtc), DateTimeOffset.UtcNow);
+                SetCurrentProperty(entity, nameof(AuditableEntity.ModifiedAtUtc), DateTime.UtcNow);
             }
         }
     }
@@ -44,5 +44,5 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
     private void SetCurrentProperty(
         EntityEntry entity,
         string propertyName,
-        DateTimeOffset dateTime) => entity.Property(propertyName).CurrentValue = dateTime; 
+        DateTime dateTime) => entity.Property(propertyName).CurrentValue = dateTime; 
 }

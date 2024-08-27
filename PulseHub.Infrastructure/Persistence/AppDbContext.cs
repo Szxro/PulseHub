@@ -30,8 +30,6 @@ public class AppDbContext : DbContext
 
     public DbSet<Credentials> Credentials => Set<Credentials>();
 
-    public DbSet<UserCredentials> UserCredentials => Set<UserCredentials>();
-
     public DbSet<DomainApplication> Application => Set<DomainApplication>();
 
     public DbSet<Provider> Provider => Set<Provider>();

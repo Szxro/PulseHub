@@ -56,7 +56,7 @@ public class RequestValidationPipelineBehavior<TRequest, TResponse>
 
     private async Task<ValidationFailure[]> ValidateAsync(TRequest request,CancellationToken cancellationToken = default)
     {
-        if (_validators.Any())
+        if (!_validators.Any())
         {
             return Array.Empty<ValidationFailure>();
         }

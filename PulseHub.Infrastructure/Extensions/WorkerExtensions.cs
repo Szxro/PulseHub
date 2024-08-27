@@ -9,6 +9,8 @@ public static partial class InfrastructureExtensions
     {
         services.AddHostedService<DatabaseInitliazerWorker>();
 
+        services.AddHostedService<DomainEventDispatcher>();
+
         return services;
     }
 }

@@ -9,17 +9,17 @@ namespace PulseHub.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly ISender _sender;
 
-        public UserController(IMediator mediator)
+        public UserController(ISender sender)
         {
-            _mediator = mediator;
+            _sender = sender;
         }
 
         [HttpPost("create")]
         public async Task<ActionResult<Result>> CreateUser(CreateUserCommand userCommand)
         {
-            Result result = await _mediator.Send(userCommand);
+            Result result = await _sender.Send(userCommand);
 
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }

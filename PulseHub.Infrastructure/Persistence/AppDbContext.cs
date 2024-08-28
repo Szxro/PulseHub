@@ -35,4 +35,6 @@ public class AppDbContext : DbContext
     public DbSet<Provider> Provider => Set<Provider>();
 
     public DbSet<AccessKey> AccessKey => Set<AccessKey>();
+
+    public DbSet<EmailCode> EmailCode => Set<EmailCode>();  
 }

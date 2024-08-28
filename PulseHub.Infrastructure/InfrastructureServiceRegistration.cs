@@ -29,6 +29,7 @@ public static class InfrastructureServiceRegistration
                 sqlOptions.CommandTimeout(databaseOptions.CommandTimeout);
 
             })
+            .AddInterceptors(provider.GetRequiredService<EnforceEmailCodeInterceptor>())
             .AddInterceptors(provider.GetRequiredService<AuditableEntityInterceptor>())
             .AddInterceptors(provider.GetRequiredService<DomainEventInterceptor>())
             .UseSnakeCaseNamingConvention();

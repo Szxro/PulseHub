@@ -15,4 +15,17 @@ public static class EmailTemplates
                     </body>
                  </html>";
     }
+
+    public static string GetWelcomeEmailBodyHtml(string userName)
+    {
+        return $@"
+                    <html>
+                        <body>
+                            <p>Hi: {userName},</p>
+                            <p>Welcome to PulseHub! We are excited to have you with us.</p>
+                            <p>If you have any questions, feel free to contact our support team.</p>
+                            <p>Best Regards,<br>The PulseHub Team.</p>
+                        </body>
+                    </html>";
+    }
 }

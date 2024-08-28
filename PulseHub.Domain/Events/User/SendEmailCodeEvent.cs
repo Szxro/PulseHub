@@ -2,9 +2,9 @@
 
 namespace PulseHub.Domain.Events.User;
 
-public class AddUserEvent : DomainEvent
+public class SendEmailCodeEvent : DomainEvent
 {
-    public AddUserEvent(string username,string email)
+    public SendEmailCodeEvent(string username,string email)
     {
         Username = username;
         Email = email;

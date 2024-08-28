@@ -64,7 +64,7 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Resul
                 SaltValue = Convert.ToHexString(salt),
             });
 
-        newUser.AddEvent(new AddUserEvent(newUser.Username,newUser.Email.Value));
+        newUser.AddEvent(new SendEmailCodeEvent(newUser.Username,newUser.Email.Value));
 
         _userRepository.Add(newUser);
 

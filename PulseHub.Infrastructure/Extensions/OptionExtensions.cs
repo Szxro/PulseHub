@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using PulseHub.Infrastructure.Options.Database;
 using PulseHub.Infrastructure.Options.Hashing;
+using PulseHub.Infrastructure.Options.SmtpServer;
 using PulseHub.Infrastructure.Validators;
 using PulseHub.SharedKernel.Contracts;
 
@@ -16,6 +17,9 @@ public static partial class InfrastructureExtensions
 
         services.ConfigureOptions<HashingOptionsSetup>()
                 .AddFluentValidator<HashingOptions>();
+
+        services.ConfigureOptions<SmtpServerOptionsSetup>()
+                .AddFluentValidator<SmtpServerOptions>();
 
         return services;
     }

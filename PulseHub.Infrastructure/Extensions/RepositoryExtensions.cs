@@ -10,6 +10,8 @@ public static partial class InfrastructureExtensions
     {
         services.AddScoped<IUserRepository, UserRepository>();
 
+        services.AddScoped<IEmailCodeRepository, EmailCodeRepository>();
+
         return services;
     }
 }

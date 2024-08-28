@@ -18,6 +18,8 @@ public static partial class InfrastructureExtensions
         services.AddTransient<IDomainEventDispatcherService, DomainEventDispatcherService>();
 
         services.AddTransient<IEmailService, EmailService>();
+
+        services.AddTransient<IAccessKeyService, AccessKeyService>();
        
         return services;
     }

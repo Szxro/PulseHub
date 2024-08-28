@@ -9,6 +9,7 @@ public class User : Entity
     {
         Applications = new HashSet<Application>();
         Credentials = new HashSet<Credentials>();
+        EmailCodes = new HashSet<EmailCode>();
     }
 
     public string FirstName { get; set; } = string.Empty;
@@ -21,8 +22,6 @@ public class User : Entity
 
     public bool LockOutEnable { get; set; } = true;
 
-    public bool IsEmailVerified { get; set; } = false;
-
     public DateTime LockOutEnd { get; set; } = DateTime.MinValue;
 
     public int AccessFailedCount { get; set; } = 0;
@@ -31,8 +30,15 @@ public class User : Entity
 
     public ICollection<Application> Applications { get; set; }
 
+    public ICollection<EmailCode> EmailCodes { get; set; }
+
     public void AddCredentials(Credentials credentials)
     {
         Credentials.Add(credentials);
+    }
+
+    public void AddEmailCode(EmailCode emailCode)
+    {
+        EmailCodes.Add(emailCode);  
     }
 }

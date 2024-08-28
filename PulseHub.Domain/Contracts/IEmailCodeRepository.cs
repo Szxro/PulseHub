@@ -1,6 +1,10 @@
-﻿namespace PulseHub.Domain.Contracts;
+﻿using PulseHub.Domain.Entities;
 
-public interface IEmailCodeRepository
+namespace PulseHub.Domain.Contracts;
+
+public interface IEmailCodeRepository : IRepositoryWriter<EmailCode>
 {
     Task<string?> GetEmailCodeByUsernameAndEmail(string username, string email, CancellationToken cancellationToken = default);
+
+    Task<EmailCode?> GetEmailCodeByCode(string emailCode, CancellationToken cancellationToken = default);
 }

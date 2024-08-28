@@ -10,6 +10,11 @@ public class EmailCodeRepository : GenericRepository<EmailCode>, IEmailCodeRepos
 {
     public EmailCodeRepository(AppDbContext dbContext) : base(dbContext) { }
 
+    public async Task<EmailCode?> GetEmailCodeByCode(string emailCode, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.EmailCode.Include(x => x.User).Where(x => x.Code == emailCode).FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<string?> GetEmailCodeByUsernameAndEmail(string username, string email,CancellationToken cancellationToken = default)
     {
         return await _dbContext.EmailCode.AsNoTracking()

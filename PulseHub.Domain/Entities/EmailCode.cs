@@ -15,4 +15,6 @@ public class EmailCode : Entity
     public int UserId { get; set; }
 
     public User User { get; set; } = null!;
+
+    public DateTime ExpiryDate { get; set; } = DateTime.Now.AddMinutes(30);
 }

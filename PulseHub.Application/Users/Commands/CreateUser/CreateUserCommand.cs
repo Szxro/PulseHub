@@ -1,6 +1,6 @@
 ﻿using PulseHub.Domain.Contracts;
 using PulseHub.Domain.Entities;
-using PulseHub.Domain.Events.User;
+using PulseHub.Domain.Events.EmailCode;
 using PulseHub.Domain.ValueObjects;
 using PulseHub.SharedKernel;
 using PulseHub.SharedKernel.Contracts;

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PulseHub.Domain.Contracts;
-using PulseHub.Domain.Events.User;
 using PulseHub.SharedKernel.Contracts;
 using PulseHub.SharedKernel;
 using PulseHub.SharedKernel.Templates;
+using PulseHub.Domain.Events.EmailCode;
 
-namespace PulseHub.Application.Users.EventHandlers
+namespace PulseHub.Application.EmailCodes.EventHandlers
 {
     internal class SendEmailCodeHandler : IDomainEventHandler<SendEmailCodeEvent>
     {
@@ -26,7 +26,7 @@ namespace PulseHub.Application.Users.EventHandlers
         public async Task Handle(SendEmailCodeEvent notification, CancellationToken cancellationToken)
         {
             _logger.LogInformation(
-                "A new user was register with the username: '{username}' and with the email address : '{email}'",
+                "Sending a email code for a user with a username '{username}' and with a email '{email}'",
                 notification.Username,
                 notification.Email);
 
@@ -37,11 +37,12 @@ namespace PulseHub.Application.Users.EventHandlers
             string? emailCode = await emailCodeRepository.GetEmailCodeByUsernameAndEmail(notification.Username, notification.Email, cancellationToken);
 
             await _emailService.SendEmailAsync(
-                new EmailMessage { 
+                new EmailMessage
+                {
                     ToAddress = notification.Email,
                     Subject = "PulseHub Email Verification Code",
-                    Body = EmailTemplates.GetVerificationEmailBodyHtml(notification.Username,emailCode!)
-                },cancellationToken);
+                    Body = EmailTemplates.GetVerificationEmailBodyHtml(notification.Username, emailCode!)
+                }, cancellationToken);
         }
     }
 }

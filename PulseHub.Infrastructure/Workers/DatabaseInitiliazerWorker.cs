@@ -5,14 +5,14 @@ using PulseHub.Domain.Contracts;
 
 namespace PulseHub.Infrastructure.Workers;
 
-public sealed class DatabaseInitliazerWorker : BackgroundService
+public sealed class DatabaseInitiliazerWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly ILogger<DatabaseInitliazerWorker> _logger;
+    private readonly ILogger<DatabaseInitiliazerWorker> _logger;
 
-    public DatabaseInitliazerWorker(
+    public DatabaseInitiliazerWorker(
         IServiceScopeFactory scopeFactory,
-        ILogger<DatabaseInitliazerWorker> logger)
+        ILogger<DatabaseInitiliazerWorker> logger)
     {
         _scopeFactory = scopeFactory;
         _logger = logger;
@@ -22,7 +22,7 @@ public sealed class DatabaseInitliazerWorker : BackgroundService
     {
         _logger.LogInformation(
             "Worker {workerName} start at {date} with {time}",
-            nameof(DatabaseInitliazerWorker),
+            nameof(DatabaseInitiliazerWorker),
             DateTime.Now.ToShortDateString(),
             DateTime.Now.ToShortTimeString());
 
@@ -35,7 +35,7 @@ public sealed class DatabaseInitliazerWorker : BackgroundService
         {
             _logger.LogInformation(
                 "Worker {workerName} was signal to stop at {date} with {time}",
-                nameof(DatabaseInitliazerWorker),
+                nameof(DatabaseInitiliazerWorker),
                 DateTime.Now.ToShortDateString(),
                 DateTime.Now.ToShortTimeString());
         });

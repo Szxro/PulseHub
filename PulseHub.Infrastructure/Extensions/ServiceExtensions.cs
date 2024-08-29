@@ -13,6 +13,8 @@ public static partial class InfrastructureExtensions
 
         services.AddScoped<IDatabaseInitializerService, DatabaseInitializerService>();
 
+        services.AddScoped<ICurrentUserService, CurrentUserService>(); // We are working with the current http context (need to be scoped)
+
         services.AddTransient<IHashingService, HashingService>();
 
         services.AddTransient<IDomainEventDispatcherService, DomainEventDispatcherService>();
@@ -20,7 +22,9 @@ public static partial class InfrastructureExtensions
         services.AddTransient<IEmailService, EmailService>();
 
         services.AddTransient<IAccessKeyService, AccessKeyService>();
-       
+
+        services.AddTransient<ITokenService, TokenService>();
+
         return services;
     }
 }

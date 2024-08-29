@@ -24,10 +24,19 @@ public class EmailCodeRepository : GenericRepository<EmailCode>, IEmailCodeRepos
                                          .FirstOrDefaultAsync(cancellationToken);   
     }
 
-    public async Task<EmailCode?> GetNoVerifiedEmailCodeByUsernameAndEmail(string username, string email,CancellationToken cancellationToken = default)
+    public async Task<List<EmailCode>> GetExpiredEmailCodesAsync(DateTime currentTime,CancellationToken cancellationToken = default)
     {
-        return await _dbContext.EmailCode.Include(x => x.User)
-                                         .Where(x => x.User.Username == username && x.User.Email.Value == email && !x.IsExpired && !x.IsInvalid && !x.IsVerified)
+        return await _dbContext.EmailCode.Where(x => x.ExpiryDate <= currentTime && !x.IsVerified && !x.IsInvalid).ToListAsync(cancellationToken);
+    }
+
+    public async Task<EmailCode?> GetCurrentActiveEmailCodeByUsernameAndEmailAsync(string username, string email,CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.EmailCode.Where(x => x.User.Username == username && x.User.Email.Value == email && !x.IsExpired && !x.IsInvalid && !x.IsVerified)
                                          .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<bool> IsUserEmailCodeVerifiedByUsernameAndEmailAsync(string username, string email, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.EmailCode.Where(x => x.User.Username == username && x.User.Email.Value == email).AnyAsync(x => x.IsVerified,cancellationToken);
     }
 }

@@ -30,15 +30,9 @@ public class VerifyEmailCodeCommandHandler : ICommandHandler<VerifyEmailCodeComm
             return Result.Failure(Error.NotFound($"The email code '{request.code}' was not found."));
         }
 
-        if (emailCode.IsVerified)
-        {
-            return Result.Failure(Error.ValidationFailure($"The email code '{request.code}' was already validated."));
-        }
+        Result result = ValidateEmailCode(emailCode);
 
-        if (emailCode.IsInvalid)
-        {
-            return Result.Failure(Error.ValidationFailure($"The email code '{request.code}' is invalid."));
-        }
+        if (result.IsFailure) return result; 
 
         emailCode.IsVerified = true;
 
@@ -50,4 +44,13 @@ public class VerifyEmailCodeCommandHandler : ICommandHandler<VerifyEmailCodeComm
 
         return Result.Success;
     }
+
+    private static Result ValidateEmailCode(EmailCode emailCode)
+        => emailCode switch
+        {
+            { IsVerified:true } => Result.Failure(Error.ValidationFailure($"The email code '{emailCode.Code}' is already validated.")),
+            { IsInvalid: true } => Result.Failure(Error.ValidationFailure($"The email code '{emailCode.Code}' is already invalid.")),
+            { IsExpired: true } => Result.Failure(Error.ValidationFailure($"The email code '{emailCode.Code}' is already expired.")),
+            _ => Result.Success,
+        };
 }

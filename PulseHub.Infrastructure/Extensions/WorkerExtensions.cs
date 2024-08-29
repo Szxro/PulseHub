@@ -7,9 +7,11 @@ public static partial class InfrastructureExtensions
 {
     public static IServiceCollection AddWorkers(this IServiceCollection services)
     {
-        services.AddHostedService<DatabaseInitliazerWorker>();
+        services.AddHostedService<DatabaseInitiliazerWorker>();
 
         services.AddHostedService<DomainEventDispatcher>();
+
+        services.AddHostedService<ExpiredEmailCodeWorker>();
 
         return services;
     }

@@ -11,15 +11,18 @@ public record ResendEmailCodeCommand(string username, string email) : ICommand<R
 
 public class ResendEmailCodeCommandHandler : ICommandHandler<ResendEmailCodeCommand, Result>
 {
+    private readonly IUserRepository _userRepository;
     private readonly IEmailCodeRepository _emailCodeRepository;
     private readonly IEmailService _emailService;
     private readonly IUnitOfWork _unitOfWork;
 
     public ResendEmailCodeCommandHandler(
+        IUserRepository userRepository,
         IEmailCodeRepository emailCodeRepository,
         IEmailService emailService,
         IUnitOfWork unitOfWork)
     {
+        _userRepository = userRepository;
         _emailCodeRepository = emailCodeRepository;
         _emailService = emailService;
         _unitOfWork = unitOfWork;
@@ -32,28 +35,38 @@ public class ResendEmailCodeCommandHandler : ICommandHandler<ResendEmailCodeComm
             return Result.Failure(Error.ValidationFailure("Invalid email address, check and try again."));
         }
 
-        EmailCode? currentEmailCode = await _emailCodeRepository.GetNoVerifiedEmailCodeByUsernameAndEmail(request.username,request.email,cancellationToken);
-        
-        if (currentEmailCode is null)
+        User? currentUser = await _userRepository.GetUserByUsernameAndEmailAsync(request.username,request.email,cancellationToken);
+
+        if (currentUser is null)
         {
-            return Result.Failure(Error.NotFound($"Not current unverified email code was found for the username '{request.username}' and email '{request.email}'."));
+            return Result.Failure(Error.NotFound($"User not found with the username '{request.username}' and email '{request.email}'"));
         }
 
-        currentEmailCode.IsInvalid = true;
+        if (await _emailCodeRepository.IsUserEmailCodeVerifiedByUsernameAndEmailAsync(request.username,request.email,cancellationToken))
+        {
+            return Result.Failure(Error.ValidationFailure($"The current user with the username '{request.username}' and email '{request.email}' is already verified"));
+        }
 
-        _emailCodeRepository.Update(currentEmailCode);
+        EmailCode? currentEmailCode = await _emailCodeRepository.GetCurrentActiveEmailCodeByUsernameAndEmailAsync(request.username,request.email,cancellationToken);
+
+        if (currentEmailCode is not null)
+        {
+            currentEmailCode.IsInvalid = true;
+
+            _emailCodeRepository.Update(currentEmailCode);
+        }
 
         EmailCode newEmailCode = new EmailCode
         {
             Code = _emailService.GenerateCode(),
-            User = currentEmailCode.User,
+            User = currentUser,
         };
 
         _unitOfWork.ChangeTrackerToUnchanged(newEmailCode.User);
 
         _emailCodeRepository.Add(newEmailCode);
 
-        newEmailCode.AddEvent(new SendEmailCodeEvent(request.username,request.email));
+        newEmailCode.AddEvent(new SendEmailCodeEvent(request.username, request.email));
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

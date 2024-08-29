@@ -19,8 +19,15 @@ public class EmailCodeRepository : GenericRepository<EmailCode>, IEmailCodeRepos
     {
         return await _dbContext.EmailCode.AsNoTracking()
                                          .Include(x => x.User)
-                                         .Where(x => x.User.Username == username && x.User.Email.Value == email)
+                                         .Where(x => x.User.Username == username && x.User.Email.Value == email && !x.IsExpired && !x.IsInvalid && !x.IsVerified)
                                          .Select(x => x.Code)
                                          .FirstOrDefaultAsync(cancellationToken);   
+    }
+
+    public async Task<EmailCode?> GetNoVerifiedEmailCodeByUsernameAndEmail(string username, string email,CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.EmailCode.Include(x => x.User)
+                                         .Where(x => x.User.Username == username && x.User.Email.Value == email && !x.IsExpired && !x.IsInvalid && !x.IsVerified)
+                                         .FirstOrDefaultAsync(cancellationToken);
     }
 }

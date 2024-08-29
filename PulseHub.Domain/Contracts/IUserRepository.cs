@@ -8,4 +8,6 @@ public interface IUserRepository : IRepositoryWriter<User>
     Task<bool> IsEmailUnique(Email email);
 
     Task<bool> IsUserNameUnique(string username);
+
+    Task<User?> GetUserByUsernameAndEmailAsync(string username, string email, CancellationToken cancellationToken = default);
 }

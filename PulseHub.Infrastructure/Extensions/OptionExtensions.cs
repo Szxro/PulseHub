@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using PulseHub.Infrastructure.Options.Database;
 using PulseHub.Infrastructure.Options.Hashing;
+using PulseHub.Infrastructure.Options.Jwt;
 using PulseHub.Infrastructure.Options.SmtpServer;
 using PulseHub.Infrastructure.Validators;
 using PulseHub.SharedKernel.Contracts;
@@ -20,6 +21,11 @@ public static partial class InfrastructureExtensions
 
         services.ConfigureOptions<SmtpServerOptionsSetup>()
                 .AddFluentValidator<SmtpServerOptions>();
+
+        services.ConfigureOptions<JwtOptionsSetup>()
+                .AddFluentValidator<JwtOptions>();
+
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
 
         return services;
     }

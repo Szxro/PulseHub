@@ -10,6 +10,7 @@ public class User : Entity
         Applications = new HashSet<Application>();
         Credentials = new HashSet<Credentials>();
         EmailCodes = new HashSet<EmailCode>();
+        RefreshTokens = new HashSet<RefreshToken>();
     }
 
     public string FirstName { get; set; } = string.Empty;
@@ -26,11 +27,13 @@ public class User : Entity
 
     public int AccessFailedCount { get; set; } = 0;
 
-    public ICollection<Credentials> Credentials { get; private set; }
+    public ICollection<Credentials> Credentials { get; }
 
     public ICollection<Application> Applications { get; set; }
 
-    public ICollection<EmailCode> EmailCodes { get; set; }
+    public ICollection<EmailCode> EmailCodes { get; }
+
+    public ICollection<RefreshToken> RefreshTokens { get; }
 
     public void AddCredentials(Credentials credentials)
     {
@@ -40,5 +43,10 @@ public class User : Entity
     public void AddEmailCode(EmailCode emailCode)
     {
         EmailCodes.Add(emailCode);  
+    }
+
+    public void AddRefreshToken(RefreshToken refreshToken)
+    {
+        RefreshTokens.Add(refreshToken);
     }
 }

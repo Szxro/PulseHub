@@ -16,6 +16,8 @@ public static class InfrastructureServiceRegistration
     {
         services.AddValidatorsFromAssembly(typeof(InfrastructureServiceRegistration).Assembly);
 
+        services.AddHttpContextAccessor();
+
         services.AddConfigurableOptions();
 
         services.AddInterceptors();

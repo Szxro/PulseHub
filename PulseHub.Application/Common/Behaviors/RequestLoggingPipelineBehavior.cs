@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using PulseHub.Domain.Contracts;
 using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.Application.Common.Behaviors;
@@ -10,40 +11,41 @@ public class RequestLoggingPipelineBehavior<TRequest, TResponse>
     where TResponse : IResult
 {
     private readonly ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> _logger;
+    private readonly ICurrentUserService _currentUserService;
 
-    public RequestLoggingPipelineBehavior(ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> logger)
+    public RequestLoggingPipelineBehavior(
+        ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> logger,
+        ICurrentUserService currentUserService)
     {
         _logger = logger;
+        _currentUserService = currentUserService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         string requestName = typeof(TRequest).Name;
 
-        _logger.LogInformation(
-            "Processing the request {request} at {date} with {time}",
+        string username = _currentUserService.GetCurrentUser() ?? "System";
+
+        _logger.LogInformation("Processing the request {request} requested by the user {user}",
             requestName,
-            DateTime.Now.ToShortDateString(),
-            DateTime.Now.ToShortTimeString());
+            username);
 
         TResponse response = await next();
 
         if (response.IsSuccess)
         {
-            _logger.LogInformation("Completed the request {request} at {date} with {time}",
+            _logger.LogInformation("Completed the request {request} requested by the user {user}",
                 requestName,
-                DateTime.Now.ToShortDateString(),
-                DateTime.Now.ToShortTimeString());
+                username);
 
             return response;
         }
 
-        _logger.LogWarning(
-            "Completed the request {request} with an error {errorName} at {date} with {time}",
+        _logger.LogWarning("Completed the request {request} requested by the user {user} with an error {errorName}",
             requestName,
-            response.Error.ErrorName,
-            DateTime.Now.ToShortDateString(),
-            DateTime.Now.ToShortTimeString());
+            username,
+            response.Error.ErrorName);
 
         return response;
     }

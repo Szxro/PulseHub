@@ -4,9 +4,7 @@ public interface IResult
 {
     public bool IsSuccess { get; }
 
-    public bool IsFailure { get; }
+    public bool IsFailure => !IsSuccess;
 
     public Error Error { get; }
-
-    public List<Error> ValidationErrors { get; }
 }

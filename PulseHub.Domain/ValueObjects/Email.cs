@@ -28,9 +28,11 @@ public class Email : ValueObject
             return false;
         }
 
-        validEmail = Result<Email>.Success(new Email(email));
+        validEmail = Result.Success(new Email(email));
         return true;
     }
+
+    public static Error InvalidEmail => Error.Validation(string.Empty, "InvalidEmail.Error", "Invalid email address. Please check and try again.");
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

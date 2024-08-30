@@ -45,7 +45,7 @@ public class RequestLoggingPipelineBehavior<TRequest, TResponse>
         _logger.LogWarning("Completed the request {request} requested by the user {user} with an error {errorName}",
             requestName,
             username,
-            response.Error.ErrorName);
+            response.Error.ErrorCode);
 
         return response;
     }

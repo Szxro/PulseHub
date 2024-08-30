@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PulseHub.Api.Extensions;
+using PulseHub.Api.Common;
+using PulseHub.Application.Common.DTOs.Requests.Users;
 using PulseHub.Application.Users.Commands.CreateUser;
 using PulseHub.SharedKernel;
 
@@ -16,12 +19,22 @@ namespace PulseHub.Api.Controllers
             _sender = sender;
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<Result>> CreateUser(CreateUserCommand userCommand)
+        [HttpPost("create-user")]
+        public async Task<IResult> CreateUser(CreateUserRequest request)
         {
-            Result result = await _sender.Send(userCommand);
+            CreateUserCommand command = new CreateUserCommand(
+                request.firstName,
+                request.lastName,
+                request.username,
+                request.email,
+                request.password);
 
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            Result result = await _sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => CustomResult.Success(result),
+                onFailure: CustomResult.Problem
+            );
         }
     }
 }

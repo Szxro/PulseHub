@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PulseHub.Api.Extensions;
+using PulseHub.Api.Common;
+using PulseHub.Application.Common.DTOs.Requests.EmailCodes;
 using PulseHub.Application.EmailCodes.Commands.ResendEmailCode;
 using PulseHub.Application.EmailCodes.Commands.VerifyEmailCode;
 using PulseHub.SharedKernel;
@@ -17,20 +20,31 @@ namespace PulseHub.Api.Controllers
             _sender = sender;
         }
 
+        // If you are writing APIs without MVC use IResult
         [HttpPost("verify")]
-        public async Task<ActionResult<Result>> VerifyEmailCode([FromQuery] string code)
+        public async Task<IResult> VerifyEmailCode(VerifyEmailCodeRequest request)
         {
-            Result response = await _sender.Send(new VerifyEmailCodeCommand(code));
+            VerifyEmailCodeCommand command = new VerifyEmailCodeCommand(request.code);
 
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            Result result = await _sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => CustomResult.Success(result),
+                onFailure: CustomResult.Problem
+             );
         }
 
         [HttpPost("resend")]
-        public async Task<ActionResult<Result>> ResendEmailCode(ResendEmailCodeCommand resendEmail)
+        public async Task<IResult> ResendEmailCode(ResendEmailRequest request)
         {
-            Result response = await _sender.Send(resendEmail);
+            ResendEmailCodeCommand command = new ResendEmailCodeCommand(request.username, request.email);
 
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            Result result = await _sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => CustomResult.Success(result),
+                onFailure: CustomResult.Problem
+            );
         }
     }
 }

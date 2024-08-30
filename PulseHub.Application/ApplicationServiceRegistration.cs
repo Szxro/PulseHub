@@ -6,7 +6,7 @@ namespace PulseHub.Application;
 
 public static class ApplicationServiceRegistration
 {
-    public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(typeof(ApplicationServiceRegistration).Assembly);
 

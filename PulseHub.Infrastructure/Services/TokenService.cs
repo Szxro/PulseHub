@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using PulseHub.Domain.Contracts;
 using PulseHub.Domain.Entities;
 using PulseHub.Infrastructure.Options.Jwt;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,9 +14,9 @@ namespace PulseHub.Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly JwtOptions _jwtOptions;
+    private readonly ILogger<TokenService> _logger;
 
     private static readonly string Algorithm = SecurityAlgorithms.HmacSha256;
-    private readonly ILogger<TokenService> _logger;
 
     public TokenService(
         IOptions<JwtOptions> options,
@@ -27,22 +27,24 @@ public class TokenService : ITokenService
     }
     public string GenerateToken(User user,double lifeTime = 10)
     {
-        JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+        // Its more faster than JwtSecurityTokenHandler 
+        JsonWebTokenHandler handler = new JsonWebTokenHandler();
 
         try
         {
             SigningCredentials credentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),Algorithm);
 
-            JwtSecurityToken securityToken = new JwtSecurityToken(
-                _jwtOptions.ValidIssuer,
-                _jwtOptions.ValidAudience,
-                GenerateClaims(user),
-                DateTime.Now,
-                DateTime.Now.AddMinutes(lifeTime),
-                credentials);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = GenerateClaims(user),
+                Expires = DateTime.Now.AddMinutes(lifeTime),
+                SigningCredentials = credentials,
+                Issuer = _jwtOptions.ValidIssuer,
+                Audience = _jwtOptions.ValidAudience
+            };
 
-            string token = handler.WriteToken(securityToken);
+            string token = handler.CreateToken(tokenDescriptor);
 
             return token;
 
@@ -69,15 +71,15 @@ public class TokenService : ITokenService
         return refreshToken;
     }
 
-    private IEnumerable<Claim> GenerateClaims(User user)
+    private ClaimsIdentity GenerateClaims(User user)
     {
-        Claim[] claims = new Claim[]
+        ClaimsIdentity claims = new ClaimsIdentity(
+            new Claim[]
         {
             new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name,user.Username),
             new Claim(JwtRegisteredClaimNames.Email,user.Email.Value),
-            new Claim(JwtRegisteredClaimNames.Iat,DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),ClaimValueTypes.Integer64)
-        };
+        });
 
         return claims;
     }

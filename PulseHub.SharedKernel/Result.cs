@@ -1,21 +1,19 @@
-﻿using PulseHub.SharedKernel.Contracts;
+﻿using System.Diagnostics.CodeAnalysis;
+using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.SharedKernel;
 
-public sealed class Result : IResult
+public class Result : IResult
 {
     public bool IsSuccess { get; }
 
-    public bool IsFailure { get; }
+    public bool IsFailure => !IsSuccess;
 
     public Error Error { get; }
 
-    public List<Error> ValidationErrors { get; }
-
-    private Result(
-        Error error,
+    protected Result(
         bool isSuccess,
-        List<Error> validationErrors)
+        Error error)
     {
         if (isSuccess && error != Error.None
             || !isSuccess && error == Error.None)
@@ -25,51 +23,32 @@ public sealed class Result : IResult
 
         Error = error;
         IsSuccess = isSuccess;
-        IsFailure = !isSuccess;
-        ValidationErrors = validationErrors;
     }
 
-    public static Result Success = new(Error.None,true,new List<Error>(0));
+    public static Result Success() => new(true, Error.None);
 
-    public static Result Failure(Error error) => new(error,false,new List<Error>(0));
+    public static Result Failure(Error error) => new(false, error);
 
-    public static Result ValidationFailure(List<Error> validationErrors) => new(Error.Validation,false,validationErrors); 
+    public static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
+
+    public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
 }
 
-public class Result<TValue> : IResult
+public class Result<TValue> : Result
 {
-    public TValue? Value { get; }
+    private readonly TValue? _value;
 
-    public bool IsSuccess { get; }
-
-    public bool IsFailure { get; }
-
-    public Error Error { get; }
-
-    public List<Error> ValidationErrors { get; }
-
-    public Result(
-        TValue? value,
-        bool isSuccess,
-        Error error,
-        List<Error> validationErrors)
+    public Result(TValue? value,bool isSuccess,Error error)
+        :base(isSuccess,error)
     {
-        if (isSuccess && error != Error.None
-         || !isSuccess && error == Error.None)
-        {
-            throw new ArgumentException("Invalid Error {error}", nameof(error));
-        }
-
-        Value = value;
-        IsSuccess = isSuccess;
-        IsFailure = !isSuccess;
-        Error = error;
-        ValidationErrors = validationErrors;
+        _value = value;
     }
 
-    public static Result<TValue> Success(TValue value) => new(value,true,Error.None,new List<Error>(0));
+    // Accessing the value of the generic result (is going to throw an exception if its a failure)
+    [NotNull]
+    public TValue Value => IsSuccess ? 
+        _value! 
+        : throw new ApplicationException("The value of a failure result can't be accessed.");
 
-    public static Result<TValue> Failure(Error error) => new(default,false,error,new List<Error>(0));
-
-    public static Result<TValue> ValidationFailure(List<Error> validationErrors) => new(default,false,Error.Validation,validationErrors);
+    public static Result<TValue> ValidationFailure(Error error) => new(default, false, error);
 }

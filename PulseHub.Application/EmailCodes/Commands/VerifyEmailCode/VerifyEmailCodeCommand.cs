@@ -1,14 +1,15 @@
 ﻿using PulseHub.Domain.Contracts;
 using PulseHub.Domain.Entities;
+using PulseHub.Domain.Errors;
 using PulseHub.Domain.Events.EmailCode;
 using PulseHub.SharedKernel;
 using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.Application.EmailCodes.Commands.VerifyEmailCode;
 
-public record VerifyEmailCodeCommand (string code): ICommand<Result>;
+public record VerifyEmailCodeCommand (string code): ICommand;
 
-public class VerifyEmailCodeCommandHandler : ICommandHandler<VerifyEmailCodeCommand, Result>
+public class VerifyEmailCodeCommandHandler : ICommandHandler<VerifyEmailCodeCommand>
 {
     private readonly IEmailCodeRepository _emailCodeRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -27,7 +28,7 @@ public class VerifyEmailCodeCommandHandler : ICommandHandler<VerifyEmailCodeComm
 
         if (emailCode is null)
         {
-            return Result.Failure(Error.NotFound($"The email code '{request.code}' was not found."));
+            return Result.Failure(EmailCodeErrors.EmailCodeNotFound(request.code));
         }
 
         Result result = ValidateEmailCode(emailCode);
@@ -42,15 +43,15 @@ public class VerifyEmailCodeCommandHandler : ICommandHandler<VerifyEmailCodeComm
 
         await _unitOfWork.SaveChangesAsync();
 
-        return Result.Success;
+        return Result.Success();
     }
 
     private static Result ValidateEmailCode(EmailCode emailCode)
         => emailCode switch
         {
-            { IsVerified:true } => Result.Failure(Error.ValidationFailure($"The email code '{emailCode.Code}' is already validated.")),
-            { IsInvalid: true } => Result.Failure(Error.ValidationFailure($"The email code '{emailCode.Code}' is already invalid.")),
-            { IsExpired: true } => Result.Failure(Error.ValidationFailure($"The email code '{emailCode.Code}' is already expired.")),
-            _ => Result.Success,
+            { IsVerified:true } => Result.Failure(EmailCodeErrors.EmailCodeAlreadyVerified(emailCode.Code)),
+            { IsInvalid: true } => Result.Failure(EmailCodeErrors.EmailCodeAlreadyInvalid(emailCode.Code)),
+            { IsExpired: true } => Result.Failure(EmailCodeErrors.EmailCodeAlreadyExpired(emailCode.Code)),
+            _ => Result.Success(),
         };
 }

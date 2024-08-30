@@ -1,5 +1,6 @@
 ﻿using PulseHub.Domain.Contracts;
 using PulseHub.Domain.Entities;
+using PulseHub.Domain.Errors;
 using PulseHub.Domain.Events.EmailCode;
 using PulseHub.Domain.ValueObjects;
 using PulseHub.SharedKernel;
@@ -7,9 +8,9 @@ using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.Application.EmailCodes.Commands.ResendEmailCode;
 
-public record ResendEmailCodeCommand(string username, string email) : ICommand<Result>;
+public record ResendEmailCodeCommand(string username, string email) : ICommand;
 
-public class ResendEmailCodeCommandHandler : ICommandHandler<ResendEmailCodeCommand, Result>
+public class ResendEmailCodeCommandHandler : ICommandHandler<ResendEmailCodeCommand>
 {
     private readonly IUserRepository _userRepository;
     private readonly IEmailCodeRepository _emailCodeRepository;
@@ -32,19 +33,19 @@ public class ResendEmailCodeCommandHandler : ICommandHandler<ResendEmailCodeComm
     {
         if (!Email.IsValid(request.email,out _))
         {
-            return Result.Failure(Error.ValidationFailure("Invalid email address, check and try again."));
+            return Result.Failure(Email.InvalidEmail);
         }
 
         User? currentUser = await _userRepository.GetUserByUsernameAndEmailAsync(request.username,request.email,cancellationToken);
 
         if (currentUser is null)
         {
-            return Result.Failure(Error.NotFound($"User not found with the username '{request.username}' and email '{request.email}'"));
+            return Result.Failure(UserErrors.UserNotFoundByUsernameAndEmail(request.username,request.email));
         }
 
         if (await _emailCodeRepository.IsUserEmailCodeVerifiedByUsernameAndEmailAsync(request.username,request.email,cancellationToken))
         {
-            return Result.Failure(Error.ValidationFailure($"The current user with the username '{request.username}' and email '{request.email}' is already verified"));
+            return Result.Failure(EmailCodeErrors.UserAlreadyVerified(request.username,request.email));
         }
 
         EmailCode? currentEmailCode = await _emailCodeRepository.GetCurrentActiveEmailCodeByUsernameAndEmailAsync(request.username,request.email,cancellationToken);
@@ -70,6 +71,6 @@ public class ResendEmailCodeCommandHandler : ICommandHandler<ResendEmailCodeComm
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success;
+        return Result.Success();
     }
 }

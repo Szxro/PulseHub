@@ -11,8 +11,6 @@ public static partial class InfrastructureExtensions
 
         services.AddSingleton<DomainEventInterceptor>();
 
-        services.AddSingleton<EnforceEmailCodeInterceptor>();
-
         return services;
     }
 }

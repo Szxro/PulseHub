@@ -2,6 +2,8 @@
 
 namespace PulseHub.SharedKernel.Contracts;
 
-public interface ICommand<out TResponse> : IRequest<TResponse> { }
+public interface ICommand<TResponse> : IRequest<Result<TResponse>>,IBaseCommand { }
 
-public interface ICommand : IRequest { }
+public interface ICommand : IRequest<Result>, IBaseCommand { }
+
+public interface IBaseCommand { }

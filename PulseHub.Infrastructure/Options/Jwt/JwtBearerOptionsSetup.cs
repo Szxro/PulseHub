@@ -25,7 +25,7 @@ public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
             ValidAudience = _jwtOptions.ValidAudience,
             ValidIssuer = _jwtOptions.ValidIssuer,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
-            ClockSkew = TimeSpan.FromSeconds(5) // must override (validating time) (default one is 5 min)
+            ClockSkew = TimeSpan.Zero // must override (validating time) (default one is 5 min)
         };
     }
 }

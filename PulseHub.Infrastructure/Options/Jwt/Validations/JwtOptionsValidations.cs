@@ -25,12 +25,12 @@ public class JwtOptionsValidations : AbstractValidator<JwtOptions>
         RuleFor(x => x.ValidAudience)
             .NotEmpty().WithMessage("The {PropertyName} can't be empty.")
             .NotNull().WithMessage("The {PropertyName} can't be null.")
-            .MinimumLength(10).WithMessage("The {PropertyName} must contain at least ten characters.");
+            .MinimumLength(5).WithMessage("The {PropertyName} must contain at least five characters.");
 
         RuleFor(x => x.ValidIssuer)
             .NotEmpty().WithMessage("The {PropertyName} can't be empty.")
             .NotNull().WithMessage("The {PropertyName} can't be null.")
-            .MinimumLength(10).WithMessage("The {PropertyName} must contain at least ten characters.");
+            .MinimumLength(5).WithMessage("The {PropertyName} must contain at least five characters.");
 
         RuleFor(x => x.SecretKey)
            .NotEmpty().WithMessage("The {PropertyName} can't be empty.")

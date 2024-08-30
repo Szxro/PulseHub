@@ -1,22 +1,20 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PulseHub.Api.Extensions;
 using PulseHub.Application;
 using PulseHub.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
     // Add services to the container.
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-    builder.Services.AddAuthorization();
-    builder.Services.AddApplicationLayer();
-    builder.Services.AddInfrastructureLayer(builder.Environment);
-    builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services
+            .AddPresentation()
+            .AddApplication()
+            .AddInfrastructure(builder.Environment);
+
     builder.Configuration.AddUserSecrets<Program>(optional:false,reloadOnChange:true);
 }
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 { 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -26,6 +24,8 @@ var app = builder.Build();
     }
 
     app.UseHttpsRedirection();
+
+    app.UseExceptionHandler();
 
     app.UseAuthentication();
 

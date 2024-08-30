@@ -1,18 +1,22 @@
 ﻿using FluentValidation.Results;
+using PulseHub.SharedKernel;
 
 namespace PulseHub.Application.Common.Exceptions;
 
 public class ValidationException : Exception
 {
-    public IReadOnlyList<ValidationFailure> Failures { get; }
+    public Error[] Failures { get; }
 
     public ValidationException() : base("One or more validations errors happen")
     {
-        Failures = new List<ValidationFailure>();
+        Failures = Array.Empty<Error>();
     }
 
     public ValidationException(IEnumerable<ValidationFailure> failures) : this()
     {
-        Failures = failures.ToList().AsReadOnly();
+        Failures = CreateValidationError(failures);
     }
+
+    private Error[] CreateValidationError(IEnumerable<ValidationFailure> failures)
+    => failures.Select(failure => Error.Validation(failure.PropertyName, failure.ErrorCode, failure.ErrorMessage)).ToArray();
 }

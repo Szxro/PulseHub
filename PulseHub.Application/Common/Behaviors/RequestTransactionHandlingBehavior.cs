@@ -8,7 +8,7 @@ namespace PulseHub.Application.Common.Behaviors;
 
 public class RequestTransactionHandlingBehavior<TRequest,TResponse>
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
+    where TRequest : IBaseCommand
     where TResponse : IResult
 {
     private readonly IUnitOfWork _unitOfWork;

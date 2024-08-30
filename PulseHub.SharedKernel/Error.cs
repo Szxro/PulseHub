@@ -2,30 +2,33 @@
 
 namespace PulseHub.SharedKernel;
 
-public sealed class Error
+public class Error
 {
-    public string ErrorName { get; } 
+    public string PropertyName { get; set; }
 
-    public string ErrorDescription { get; }
+    public string ErrorCode { get; }
 
-    public ErrorType ErrorType { get; }
+    public string Description { get; }
 
-    private Error(string errorName,string errorDescription,ErrorType errorType)
+    public ErrorType Type { get; }
+
+    protected Error(
+        string propertyName,
+        string errorCode,
+        string errorDescription,
+        ErrorType errorType)
     {
-        ErrorName = errorName;
-        ErrorDescription = errorDescription;
-        ErrorType = errorType;
+        PropertyName = propertyName;
+        ErrorCode = errorCode;
+        Description = errorDescription;
+        Type = errorType;
     }
 
-    public static Error None = new(string.Empty,string.Empty,ErrorType.None);
+    public static Error None = new(string.Empty,string.Empty,string.Empty,ErrorType.None);
 
-    public static Error Validation = new("Validation.Error","One or more validation error occurred",ErrorType.Validation);
+    public static Error NotFound(string errorDescription) => new(string.Empty,"NotFound.Error",errorDescription,ErrorType.NotFound);
 
-    public static Error ValidationFailure(string errorDescription) => new("Validation.Error",errorDescription,ErrorType.Validation); 
+    public static Error Conflit(string errorDescription) => new(string.Empty,"Conflit.Error",errorDescription,ErrorType.Conflict);
 
-    public static Error NotFound(string errorDescription) => new("NotFound.Error",errorDescription,ErrorType.NotFound);
-
-    public static Error Conflit(string errorDescription) => new("Conflit.Error",errorDescription,ErrorType.Conflit);
-
-    public static Error Exception(string errorDescription) => new("Exception.Error",errorDescription,ErrorType.Exception);
+    public static Error Validation(string propertyName,string errorCode,string errorDescription) => new(propertyName, errorCode, errorDescription, ErrorType.Validation); 
 }

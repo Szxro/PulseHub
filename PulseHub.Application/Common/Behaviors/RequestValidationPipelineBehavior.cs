@@ -39,15 +39,14 @@ public class RequestValidationPipelineBehavior<TRequest, TResponse>
             if (failureMethod is not null)
             {
                 #pragma warning disable CS8600
-                #pragma warning disable CS8603
+                #pragma warning disable CS8603 
                 return (TResponse)failureMethod.Invoke(null,
-                                                       [CreateValidationErrors(failures)]);
-            }
+                                                       [CreateValidationError(failures)]);            }
         }
 
         if (typeof(TResponse) == typeof(Result))
         {
-            return (TResponse)(object)Result.ValidationFailure(CreateValidationErrors(failures));
+            return (TResponse)(object)Result.Failure(CreateValidationError(failures));
         }
 
 
@@ -71,6 +70,6 @@ public class RequestValidationPipelineBehavior<TRequest, TResponse>
         return validationFailures;
     }
 
-    private List<Error> CreateValidationErrors(ValidationFailure[] failures)
-        => failures.Select(error => Error.ValidationFailure(error.ErrorMessage)).ToList();
+    private ValidationError CreateValidationError(ValidationFailure[] failures)
+        => new ValidationError(failures.Select(failure => Error.Validation(failure.PropertyName,failure.ErrorCode,failure.ErrorMessage)).ToArray());
 }

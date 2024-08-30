@@ -12,7 +12,7 @@ namespace PulseHub.Infrastructure;
 
 public static class InfrastructureServiceRegistration
 {
-    public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services,IHostEnvironment environment)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services,IHostEnvironment environment)
     {
         services.AddValidatorsFromAssembly(typeof(InfrastructureServiceRegistration).Assembly);
 
@@ -31,7 +31,6 @@ public static class InfrastructureServiceRegistration
                 sqlOptions.CommandTimeout(databaseOptions.CommandTimeout);
 
             })
-            .AddInterceptors(provider.GetRequiredService<EnforceEmailCodeInterceptor>())
             .AddInterceptors(provider.GetRequiredService<AuditableEntityInterceptor>())
             .AddInterceptors(provider.GetRequiredService<DomainEventInterceptor>())
             .UseSnakeCaseNamingConvention();

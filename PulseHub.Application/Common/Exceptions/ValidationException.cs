@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using PulseHub.Application.Common.Utilities;
 using PulseHub.SharedKernel;
 
 namespace PulseHub.Application.Common.Exceptions;
@@ -12,11 +13,11 @@ public class ValidationException : Exception
         Failures = Array.Empty<Error>();
     }
 
-    public ValidationException(IEnumerable<ValidationFailure> failures) : this()
+    public ValidationException(ValidationFailure[] failures) : this()
     {
         Failures = CreateValidationError(failures);
     }
 
     private Error[] CreateValidationError(IEnumerable<ValidationFailure> failures)
-    => failures.Select(failure => Error.Validation(failure.PropertyName, failure.ErrorCode, failure.ErrorMessage)).ToArray();
+        => failures.Select(ErrorHelpers.CreateErrorFromValidationFailure).ToArray();
 }

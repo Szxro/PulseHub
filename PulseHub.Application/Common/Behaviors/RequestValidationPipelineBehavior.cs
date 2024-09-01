@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using PulseHub.Application.Common.Utilities;
 using PulseHub.SharedKernel;
 using PulseHub.SharedKernel.Extensions;
 using System.Reflection;
@@ -71,5 +72,5 @@ public class RequestValidationPipelineBehavior<TRequest, TResponse>
     }
 
     private ValidationError CreateValidationError(ValidationFailure[] failures)
-        => new ValidationError(failures.Select(failure => Error.Validation(failure.PropertyName,failure.ErrorCode,failure.ErrorMessage)).ToArray());
+        => new ValidationError(failures.Select(ErrorHelpers.CreateErrorFromValidationFailure).ToArray());
 }

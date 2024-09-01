@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PulseHub.Application.Common.DTOs.Responses;
 using PulseHub.Application.Common.Exceptions;
+using PulseHub.Application.Common.Utilities;
 namespace PulseHub.Api.Middlewares;
 
 public class GlobalExceptionHandler : IExceptionHandler
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             Status = StatusCodes.Status500InternalServerError,
         };
 
-        Dictionary<string, object?>? errors = GetErrors(exception);
+        Dictionary<string, object?>? errors = GetErrorsFromException(exception);
 
         if (errors is not null)
         {
@@ -41,28 +42,18 @@ public class GlobalExceptionHandler : IExceptionHandler
         return true;
     }
 
-    private static Dictionary<string, object?>? GetErrors(Exception exception)
+    private static Dictionary<string, object?>? GetErrorsFromException(Exception exception)
     {
         if (exception is not ValidationException validation)
         {
             return null;
         }
 
-        Dictionary<string, List<ErrorResponse>> errors = validation.Failures
-           .GroupBy(x => x.PropertyName)
-           .ToDictionary(
-               property => property.Key,
-               property => property
-                   .Select(failure => new ErrorResponse
-                   {
-                       Code = failure.ErrorCode,
-                       Message = failure.Description
-                   }).ToList());
-
+        Dictionary<string, List<ErrorResponse>> errors = ErrorHelpers.GroupErrorsByPropertyName(validation.Failures);
 
         return new Dictionary<string, object?>
-            {
-                { "errors", errors }
-            };
+        {
+            { "errors",errors }
+        };
     }
 }

@@ -32,7 +32,7 @@ namespace PulseHub.Api.Controllers
             Result result = await _sender.Send(command);
 
             return result.Match(
-                onSuccess: () => CustomResult.Success(result),
+                onSuccess: Results.Created,
                 onFailure: CustomResult.Problem
             );
         }

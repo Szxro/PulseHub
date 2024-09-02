@@ -12,6 +12,8 @@ public static partial class InfrastructureExtensions
 
         services.AddScoped<IEmailCodeRepository, EmailCodeRepository>();
 
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
         return services;
     }
 }

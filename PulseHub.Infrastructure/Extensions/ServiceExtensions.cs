@@ -9,11 +9,15 @@ public static partial class InfrastructureExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        // Memory Cache is designed to be use as singleton
+        services.AddSingleton<ICacheService, CacheService>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IDatabaseInitializerService, DatabaseInitializerService>();
 
-        services.AddScoped<ICurrentUserService, CurrentUserService>(); // We are working with the current http context (need to be scoped)
+        // We are working with the current http context (need to be scoped)
+        services.AddScoped<ICurrentUserService, CurrentUserService>(); 
 
         services.AddTransient<IHashingService, HashingService>();
 

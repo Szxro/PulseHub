@@ -50,6 +50,8 @@ public static class InfrastructureServiceRegistration
 
         services.AddRepositories();
 
+        services.AddMemoryCache();
+
         return services;
     }
 }

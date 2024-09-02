@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PulseHub.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PulseHub.Infrastructure.Persistence;
 namespace PulseHub.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240902131833_Add_Expiration_date_column_Refresh_Token_Table")]
+    partial class Add_Expiration_date_column_Refresh_Token_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,21 +295,21 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5963),
+                            CreatedAtUtc = new DateTime(2024, 9, 2, 13, 18, 33, 498, DateTimeKind.Utc).AddTicks(5102),
                             DeletedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Discord is a platform for text, voice, and video chat, designed for creating and managing communities and staying connected.",
                             IsDeleted = false,
-                            ModifiedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5965),
+                            ModifiedAtUtc = new DateTime(2024, 9, 2, 13, 18, 33, 498, DateTimeKind.Utc).AddTicks(5104),
                             Name = "Discord"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5967),
+                            CreatedAtUtc = new DateTime(2024, 9, 2, 13, 18, 33, 498, DateTimeKind.Utc).AddTicks(5106),
                             DeletedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Telegram is a messaging app that offers fast, secure text, voice, and video communication. It supports group chats, channels, and multimedia sharing.",
                             IsDeleted = false,
-                            ModifiedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5968),
+                            ModifiedAtUtc = new DateTime(2024, 9, 2, 13, 18, 33, 498, DateTimeKind.Utc).AddTicks(5106),
                             Name = "Telegram"
                         });
                 });
@@ -335,10 +338,6 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnName("is_deleted");
-
-                    b.Property<bool>("IsExpired")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_expired");
 
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("bit")

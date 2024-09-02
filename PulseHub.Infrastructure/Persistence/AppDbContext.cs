@@ -37,4 +37,6 @@ public class AppDbContext : DbContext
     public DbSet<AccessKey> AccessKey => Set<AccessKey>();
 
     public DbSet<EmailCode> EmailCode => Set<EmailCode>();  
+
+    public DbSet<RefreshToken> RefreshToken => Set<RefreshToken>();
 }

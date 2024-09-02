@@ -27,7 +27,7 @@ public class User : Entity
 
     public int AccessFailedCount { get; set; } = 0;
 
-    public ICollection<Credentials> Credentials { get; }
+    public ICollection<Credentials> Credentials { get; set; }
 
     public ICollection<Application> Applications { get; set; }
 

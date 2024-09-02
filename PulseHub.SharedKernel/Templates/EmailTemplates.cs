@@ -28,4 +28,20 @@ public static class EmailTemplates
                         </body>
                     </html>";
     }
+
+    public static string GetLockOutEmailBodyHtml(string username,DateTime lockOutDate)
+    {
+        return $@"
+                <html>
+                    <h1>Dear: {username}</h1>
+                    <p>We noticed multiple unsuccessful login attempts on your account. For security reasons, your account has been temporarily locked to prevent unauthorized access.</p>
+                    <hr>
+                    <h2>Details: </h2>
+                    <ul>
+                        <li>Username : {username}</li>
+                        <li>Lockout date: {lockOutDate}</li>
+                    </ul>
+                </html>
+            ";
+    }
 }

@@ -6,11 +6,13 @@ public class RefreshToken : Entity
 {
     public string Value { get; set; } = string.Empty;
 
-    public bool IsRevoked { get; set; }
+    public bool IsRevoked { get; set; } = false;
 
-    public bool IsUsed { get; set; }
+    public bool IsExpired { get; set; } = false;
 
-    public DateTime ExpirationDate { get; } = DateTime.Now.AddHours(1);
+    public bool IsUsed { get; set; } = false;
+
+    public DateTime ExpirationDate { get; set; } = DateTime.Now.AddHours(1);
 
     public int UserId { get; set; }
 

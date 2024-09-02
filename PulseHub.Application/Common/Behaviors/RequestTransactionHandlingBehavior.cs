@@ -33,14 +33,11 @@ public class RequestTransactionHandlingBehavior<TRequest,TResponse>
         {
             TResponse response = await next();
 
-            if (response.IsSuccess)
-            {
-                _logger.LogInformation(
-                    "The command {commandName} was successfully completed, committing the transaction.",
-                    commandName);
-             
-               transaction.Commit();
-            }
+            _logger.LogInformation(
+                "The command {commandName} was completed succesfully, committing the transaction.",
+                commandName);
+
+            transaction.Commit();
 
             return response;
 

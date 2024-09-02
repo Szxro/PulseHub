@@ -5,6 +5,8 @@ using PulseHub.Api.Common;
 using PulseHub.Application.Common.DTOs.Requests.Users;
 using PulseHub.Application.Users.Commands.CreateUser;
 using PulseHub.SharedKernel;
+using PulseHub.Application.Users.Commands.LoginUser;
+using PulseHub.Application.Common.DTOs.Responses;
 
 namespace PulseHub.Api.Controllers
 {
@@ -35,6 +37,18 @@ namespace PulseHub.Api.Controllers
                 onSuccess: Results.Created,
                 onFailure: CustomResult.Problem
             );
+        }
+
+        [HttpPost("login-user")]
+        public async Task<IResult> LoginUser(LoginUserRequest loginRequest)
+        {
+            LoginUserCommand command = new LoginUserCommand(loginRequest.username,loginRequest.password);
+
+            Result<TokenResponse> result = await _sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => CustomResult.Success(result),
+                onFailure: CustomResult.Problem);
         }
     }
 }

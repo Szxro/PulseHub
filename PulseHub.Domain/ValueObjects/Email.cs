@@ -1,4 +1,6 @@
 ﻿using PulseHub.SharedKernel;
+
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace PulseHub.Domain.ValueObjects;
@@ -9,6 +11,7 @@ public class Email : ValueObject
 
     public string Value { get; }
 
+    [JsonConstructor]
     private Email(string value)
     {
         Value = value;
@@ -28,7 +31,7 @@ public class Email : ValueObject
             return false;
         }
 
-        validEmail = Result.Success(new Email(email));
+        validEmail = Result<Email>.Success(new Email(email));
         return true;
     }
 

@@ -16,6 +16,11 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         return await _dbContext.User.Where(x => x.Username == username && x.Email.Value == email).FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<User?> GetUserByUsernameAsync(string username, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.User.Include(x => x.Credentials).Where(x => x.Username == username).FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<bool> IsEmailUnique(Email email)
     {
         return await _dbContext.User.AsNoTracking().AnyAsync(user => user.Email.Value == email.Value);

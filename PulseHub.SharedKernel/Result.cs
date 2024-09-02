@@ -28,10 +28,6 @@ public class Result : IResult
     public static Result Success() => new(true, Error.None);
 
     public static Result Failure(Error error) => new(false, error);
-
-    public static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
-
-    public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
 }
 
 public class Result<TValue> : Result
@@ -49,6 +45,11 @@ public class Result<TValue> : Result
     public TValue Value => IsSuccess ? 
         _value! 
         : throw new ApplicationException("The value of a failure result can't be accessed.");
+
+    public static Result<TValue> Success(TValue value) => new(value, true, Error.None);
+
+    // If hide was intended  need to use the new keyword 
+    public static new Result<TValue> Failure(Error error) => new(default, false, error);
 
     public static Result<TValue> ValidationFailure(Error error) => new(default, false, error);
 }

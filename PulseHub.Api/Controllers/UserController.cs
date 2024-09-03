@@ -22,6 +22,8 @@ namespace PulseHub.Api.Controllers
         }
 
         [HttpPost("create-user")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IResult> CreateUser(CreateUserRequest request)
         {
             CreateUserCommand command = new CreateUserCommand(
@@ -40,6 +42,9 @@ namespace PulseHub.Api.Controllers
         }
 
         [HttpPost("login-user")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IResult> LoginUser(LoginUserRequest loginRequest)
         {
             LoginUserCommand command = new LoginUserCommand(loginRequest.username,loginRequest.password);

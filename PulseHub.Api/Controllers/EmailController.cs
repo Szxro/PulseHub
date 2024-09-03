@@ -22,6 +22,9 @@ namespace PulseHub.Api.Controllers
 
         // If you are writing APIs without MVC use IResult
         [HttpPost("verify")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IResult> VerifyEmailCode(VerifyEmailCodeRequest request)
         {
             VerifyEmailCodeCommand command = new VerifyEmailCodeCommand(request.code);
@@ -35,6 +38,9 @@ namespace PulseHub.Api.Controllers
         }
 
         [HttpPost("resend")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IResult> ResendEmailCode(ResendEmailRequest request)
         {
             ResendEmailCodeCommand command = new ResendEmailCodeCommand(request.username, request.email);

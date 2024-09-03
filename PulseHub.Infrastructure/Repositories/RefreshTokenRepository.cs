@@ -21,4 +21,16 @@ public class RefreshTokenRepository : GenericRepository<RefreshToken>, IRefreshT
                                             .Where(x => x.User.Username == username && !x.IsUsed && !x.IsRevoked && !x.IsExpired)
                                             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task<RefreshToken?> FetchValidRefreshTokenAsync(string refreshToken, string username, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.RefreshToken.AsNoTracking()
+                                            .Include(x => x.User)
+                                            .Where(x => x.Value == refreshToken
+                                                    && !x.IsUsed
+                                                    && !x.IsRevoked
+                                                    && !x.IsExpired
+                                                    && x.User.Username == username)
+                                            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

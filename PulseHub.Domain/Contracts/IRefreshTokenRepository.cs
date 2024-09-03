@@ -7,4 +7,6 @@ public interface IRefreshTokenRepository : IRepositoryWriter<RefreshToken>
     Task<RefreshToken?> GetUnusedUserRefreshTokenByUsernameAsync(string username,CancellationToken cancellationToken = default);
 
     Task<List<RefreshToken>> GetExpiredUserRefreshTokenAsync(DateTime currentDateTime, CancellationToken cancellationToken = default);
+
+    Task<RefreshToken?> FetchValidRefreshTokenAsync(string refreshToken, string username, CancellationToken cancellationToken = default);
 }

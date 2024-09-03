@@ -46,6 +46,8 @@ public static class InfrastructureServiceRegistration
 
         services.AddServices();
 
+        services.AddStrategies();
+
         services.AddWorkers();
 
         services.AddRepositories();

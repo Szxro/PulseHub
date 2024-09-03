@@ -13,6 +13,8 @@ public static partial class InfrastructureExtensions
 
         services.AddHostedService<ExpiredEmailCodeWorker>();
 
+        services.AddHostedService<ExpiredRefreshTokenWorker>();
+
         return services;
     }
 }

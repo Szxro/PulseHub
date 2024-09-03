@@ -12,7 +12,7 @@ public class RefreshToken : Entity
 
     public bool IsUsed { get; set; } = false;
 
-    public DateTime ExpirationDate { get; set; } = DateTime.Now.AddHours(1);
+    public DateTime ExpirationDate { get; set; } = DateTime.Now.AddMinutes(45);
 
     public int UserId { get; set; }
 

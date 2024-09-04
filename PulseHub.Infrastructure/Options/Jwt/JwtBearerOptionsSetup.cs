@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PulseHub.Infrastructure.Options.Jwt;
 
-public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
+public class JwtBearerOptionsSetup : IPostConfigureOptions<JwtBearerOptions>
 {
     private readonly JwtOptions _jwtOptions;
 
@@ -14,7 +14,8 @@ public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
         _jwtOptions = options.Value;
     }
 
-    public void Configure(JwtBearerOptions options)
+    // These configuration run after all IConfigureOptions<TOptions> (singleton)
+    public void PostConfigure(string? name, JwtBearerOptions options)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {

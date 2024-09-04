@@ -2,7 +2,9 @@
 
 public interface IDatabaseInitializerService
 {
-    Task CanConnectAsync();
+    Task CanConnectAsync(CancellationToken cancellationToken = default);
 
-    Task MigrateAsync();
+    Task MigrateAsync(CancellationToken cancellationToken = default);
+
+    Task SeedAsync(CancellationToken cancellationToken = default);
 }

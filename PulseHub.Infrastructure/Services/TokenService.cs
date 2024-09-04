@@ -32,7 +32,6 @@ public class TokenService : ITokenService
             ValidateAudience = _jwtOptions.ValidateAudience,
             ValidateIssuer = _jwtOptions.ValidateIssuer,
             ValidateLifetime = false, // to not have a lifetime exception
-            ValidateIssuerSigningKey = _jwtOptions.ValidateIssuerSigningKey,
             ValidIssuer = _jwtOptions.ValidIssuer,
             ValidAudience = _jwtOptions.ValidAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey))

@@ -18,10 +18,6 @@ public class JwtOptionsValidations : AbstractValidator<JwtOptions>
             .NotEmpty().WithMessage("The {PropertyName} can't be empty.")
             .NotNull().WithMessage("The {PropertyName} can't be null.");
 
-        RuleFor(x => x.ValidateIssuerSigningKey)
-            .NotEmpty().WithMessage("The {PropertyName} can't be empty.")
-            .NotNull().WithMessage("The {PropertyName} can't be null.");
-
         RuleFor(x => x.ValidAudience)
             .NotEmpty().WithMessage("The {PropertyName} can't be empty.")
             .NotNull().WithMessage("The {PropertyName} can't be null.")

@@ -4,12 +4,12 @@ using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.Infrastructure.Options.Base;
 
-public abstract class BaseSetup<TOption> : IConfigureOptions<TOption>
+public abstract class BaseOptionSetup<TOption> : IConfigureOptions<TOption>
     where TOption : class, IOptionSetup
 {
     private readonly IConfiguration _configuration;
 
-    public BaseSetup(IConfiguration configuration)
+    public BaseOptionSetup(IConfiguration configuration)
     {
         _configuration = configuration;
     }

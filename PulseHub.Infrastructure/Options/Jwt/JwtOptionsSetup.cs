@@ -3,7 +3,7 @@ using PulseHub.Infrastructure.Options.Base;
 
 namespace PulseHub.Infrastructure.Options.Jwt;
 
-public class JwtOptionsSetup : BaseSetup<JwtOptions>
+public class JwtOptionsSetup : BaseOptionSetup<JwtOptions>
 {
     public JwtOptionsSetup(IConfiguration configuration) : base(configuration) { }
 }

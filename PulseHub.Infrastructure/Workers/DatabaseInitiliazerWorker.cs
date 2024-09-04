@@ -44,8 +44,10 @@ public sealed class DatabaseInitiliazerWorker : BackgroundService
 
         IDatabaseInitializerService initializerService = scope.ServiceProvider.GetRequiredService<IDatabaseInitializerService>();
 
-        await initializerService.CanConnectAsync();
+        await initializerService.MigrateAsync(stoppingToken);
 
-        await initializerService.MigrateAsync();
+        await initializerService.CanConnectAsync(stoppingToken);
+
+        await initializerService.SeedAsync(stoppingToken);
     }
 }

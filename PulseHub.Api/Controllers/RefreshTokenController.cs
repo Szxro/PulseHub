@@ -1,9 +1,5 @@
-﻿using System.Net;
-using MediatR;
-
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
 using PulseHub.Api.Common;
 using PulseHub.Api.Extensions;
 using PulseHub.Application.Common.DTOs.Requests.RefreshToken;

@@ -45,7 +45,7 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("EncryptedKey")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("encrypted_key");
 
                     b.Property<bool>("IsActive")
@@ -69,6 +69,10 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ApplicationId")
                         .HasDatabaseName("ix_access_key_application_id");
+
+                    b.HasIndex("EncryptedKey")
+                        .IsUnique()
+                        .HasDatabaseName("ix_access_key_encrypted_key");
 
                     b.ToTable("access_key", (string)null);
                 });
@@ -105,7 +109,7 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("name");
 
                     b.Property<string>("ProviderApplicationId")
@@ -123,6 +127,10 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_application");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_application_name");
 
                     b.HasIndex("ProviderId")
                         .HasDatabaseName("ix_application_provider_id");
@@ -287,28 +295,6 @@ namespace PulseHub.Infrastructure.Persistence.Migrations
                         .HasName("pk_provider");
 
                     b.ToTable("provider", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5963),
-                            DeletedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Discord is a platform for text, voice, and video chat, designed for creating and managing communities and staying connected.",
-                            IsDeleted = false,
-                            ModifiedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5965),
-                            Name = "Discord"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5967),
-                            DeletedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Telegram is a messaging app that offers fast, secure text, voice, and video communication. It supports group chats, channels, and multimedia sharing.",
-                            IsDeleted = false,
-                            ModifiedAtUtc = new DateTime(2024, 9, 2, 19, 17, 7, 271, DateTimeKind.Utc).AddTicks(5968),
-                            Name = "Telegram"
-                        });
                 });
 
             modelBuilder.Entity("PulseHub.Domain.Entities.RefreshToken", b =>

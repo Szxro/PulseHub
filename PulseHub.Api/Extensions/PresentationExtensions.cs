@@ -19,6 +19,18 @@ public static partial class ApiExtensions
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
+
+        services.AddCors(options => 
+        {
+            options.AddPolicy("default", policy =>
+            {
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+                policy.AllowAnyOrigin();
+                policy.SetIsOriginAllowed(origin => true);
+            });
+        });
+
         return services;
     }
 }

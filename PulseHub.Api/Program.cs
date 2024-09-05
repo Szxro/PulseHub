@@ -27,6 +27,8 @@ WebApplication app = builder.Build();
 
     app.UseExceptionHandler();
 
+    app.UseCors("default");
+
     app.UseAuthentication();
 
     app.UseAuthorization();

@@ -1,1 +1,66 @@
-<p>register works!</p>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <label for="firstname">Firstname: </label>
+    <input type="text" id="firstname" formControlName="firstname"/>
+    <ng-container *ngIf="registerForm.controls.firstname as firstname">
+        <span *ngIf="firstname.dirty && firstname.hasError('required')">
+            The firstname field is required
+        </span>
+        <span *ngIf="firstname.dirty && firstname.hasError('minlength')">
+            The firstname field must be a least <strong>{{ firstname.getError('minlength').requiredLength}}</strong> characters long
+        </span>
+    </ng-container>
+    <label for="lastname">Lastname: </label>
+    <input type="text" id="lastname" formControlName="lastname"/>
+    <ng-container *ngIf="registerForm.controls.lastname as lastname">
+        <span *ngIf="lastname.dirty && lastname.hasError('required')">
+            The lastname field is required
+        </span>
+        <span *ngIf="lastname.dirty && lastname.hasError('minlength')">
+            The lastname field must be a least <strong>{{ lastname.getError('minlength').requiredLength}}</strong> characters long
+        </span>
+    </ng-container>
+    <label for="username">Username: </label>
+    <input type="text" id="username" formControlName="username"/>
+    <ng-container *ngIf="registerForm.controls.username as username">
+        <span *ngIf="username.dirty && username.hasError('required')">
+            The username field is required.
+        </span>
+        <span *ngIf="username.dirty && username.hasError('minlength')">
+            The username field must be at least <strong>{{ username.getError('minlength').requiredLength }}</strong> characters long.
+        </span>
+        <span *ngIf="username.dirty && username.hasError('maxlength')">
+            The username field must have a max length of <strong>{{ username.getError('maxlength').requiredLength }}</strong> characters long.
+        </span>
+        <span *ngIf="username.dirty && username.hasError('pattern')">
+            The username field can only contain letters, numbers, and underscores.
+        </span>
+    </ng-container>
+    <label for="email">Email: </label>
+    <input type="text" id="email" formControlName="email"/>
+    <ng-container *ngIf="registerForm.controls.email as email">
+        <span *ngIf="email.dirty && email.hasError('required')">
+            The email field is required
+        </span>
+        <span *ngIf="email.dirty && email.hasError('email')">
+            The email field must be valid
+        </span>
+    </ng-container>
+    <label for="password">Password: </label>
+    <input type="password" id="password" formControlName="password"/>
+    <ng-container *ngIf="registerForm.controls.password as password">
+        <span *ngIf="password.dirty && password.hasError('required')">
+            The password field is required
+        </span>
+        <span *ngIf="password.dirty && password.hasError('minlength')">
+            The password must be a least <strong>{{ password.getError('minlength').requiredLength }}</strong> characters long
+        </span>
+        <span *ngIf="password.dirty && password.hasError('invalidPassword')">
+            {{ password.getError('invalidPassword').message }}
+        </span>
+    </ng-container>
+    <button type="submit" [disabled]="!registerForm.valid">Register</button>
+</form>
+
+<span>Already have an account?</span> <a routerLink="/login">Sign in.</a>
+
+<pre>{{ registerForm.value | json }}</pre>

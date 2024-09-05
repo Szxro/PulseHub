@@ -1,10 +1,28 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <label for="username">Username: </label>
     <input type="text" id="username" formControlName="username"/>
+    <ng-container *ngIf="loginForm.controls.username as username">
+        <span *ngIf="username.dirty && username.hasError('required')">
+            The username field is required.
+        </span>
+        <span *ngIf="username.dirty && username.hasError('minlength')">
+            The username field must be at least <strong>{{ username.getError('minlength').requiredLength }}</strong> characters long.
+        </span>
+        <span *ngIf="username.dirty && username.hasError('maxlength')">
+            The username field must have a max length of <strong>{{ username.getError('maxlength').requiredLength }}</strong> characters long.
+        </span>
+        <span *ngIf="username.dirty && username.hasError('pattern')">
+            The username field can only contain letters, numbers, and underscores.
+        </span>
+    </ng-container>
     <label for="password">Password: </label>
     <input type="password" id="password" formControlName="password"/>
-    <button type="submit">Log In</button>
+    <ng-container *ngIf="loginForm.controls.password as password">
+        <span *ngIf="password.dirty && password.hasError('required')">
+            The password field is required.
+        </span>
+    </ng-container>
+    <button type="submit" [disabled]="!loginForm.valid">Log In</button>
 </form>
 
-<pre>{{ this.loginForm.value | json }}</pre>
-
+<span>New to PulseHub?</span> <a routerLink="/register">Create an account.</a>

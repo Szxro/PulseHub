@@ -3,8 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { SharedModule } from './shared/shared.module';
+import { spinnerInterceptor } from './core/interceptors/spinner.interceptor';
 
 @NgModule({
   declarations: [
@@ -13,10 +16,17 @@ import { provideHttpClient } from '@angular/common/http';
   imports: [
     AppRoutingModule,
     BrowserModule,
-    CoreModule
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({ 
+      timeOut:3000,
+      preventDuplicates: true 
+    }),
+    SharedModule
   ],
   providers: [
-    provideHttpClient()
+    provideHttpClient(
+      withInterceptors([ spinnerInterceptor ])
+    )
   ],
   bootstrap: [AppComponent]
 })

@@ -2,23 +2,27 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
-
-import { LogInComponent } from './pages/log-in/log-in.component';
+import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { LayoutComponent } from './pages/layout/layout.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { VALIDATION_ERROR_TOKEN } from '../../core/tokens/validation-error.token';
+import { AUTH_VALIDATION_MESSAGES } from './constants/auth-validation-messages.constant';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    LogInComponent,
-    RegisterComponent,
-    LayoutComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     CommonModule,
+    AuthRoutingModule,
     ReactiveFormsModule,
-    AuthRoutingModule
+    SharedModule
+  ],
+  providers:[
+    { provide:VALIDATION_ERROR_TOKEN, useValue:AUTH_VALIDATION_MESSAGES }
   ]
 })
 export class AuthModule { }

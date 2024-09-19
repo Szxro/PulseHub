@@ -1,44 +1,62 @@
-import { Component, DestroyRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from '../../../../core/utils/custom-validators';
-import { RegisterForm } from '../../models/register-form.model';
-import { AuthService } from '../../services/auth-service.service';
-import { RegisterRequest } from '../../models/register-request.model';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnDestroy } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { catchError, EMPTY, Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth.service';
+import { ToastService } from '../../../../core/services/toast.service';
+import { CustomValidators } from '../../../../shared/validators/custom-validators';
+import { ErrorResponse } from '../../../../core/models/responses/error-response.model';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent{
-  public registerForm: FormGroup<RegisterForm> = this.formBuilder.nonNullable.group({
-    firstname: ['',[Validators.required, Validators.minLength(3)]],
-    lastname:  ['', [Validators.required, Validators.minLength(3)]],
-    username:  ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern("^[a-zA-Z0-9_]+$")]],
-    email:     ['', [Validators.required, Validators.email]],
-    password:  ['',[Validators.required, Validators.minLength(8), CustomValidators.isPasswordValid]]
+export class RegisterComponent implements OnDestroy {
+  private readonly _onDestroy$ = new Subject<void>();
+
+  public readonly registerForm = this._formBuilder.nonNullable.group({
+    firstname:['',[Validators.required]],
+    lastname:['',[Validators.required]],
+    username:['',[Validators.required,CustomValidators.usernameCheck]],
+    email:['',[Validators.required]],
+    password:['',[Validators.required,CustomValidators.passwordStrengthCheck,Validators.minLength(6)]],
+    confirmPassword:['',[Validators.required]]
+  },{
+    // List of validators applied to the form group (global validators)
+    validators: [ CustomValidators.passwordMatch ] 
   });
-  
+
   constructor(
-    private formBuilder: FormBuilder,
-    private authService:AuthService,
-    private destroyRef: DestroyRef
-  ) {}
+    private readonly _formBuilder:FormBuilder,
+    private readonly _authService:AuthService,
+    private readonly _router:Router,
+    private readonly _toast:ToastService
+  ){}
 
 
-  onSubmit(){
-    const request = this.registerForm.value as RegisterRequest; 
-    
-    this.authService.registerIn(request)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) =>{
-        if(response !== undefined && response.status === 201){
-          //TODO: Send a notification when the register was successfully and redirect to the login page
-          console.log("Created succesfully,check your email...")
-        }
-
-        console.log("An error happen")
-      });
+  ngOnDestroy(): void {
+    this._onDestroy$.next();
+    this._onDestroy$.complete();
   }
+
+  public onSubmit(){
+    const { confirmPassword, ...credentials } = this.registerForm.getRawValue();
+
+    this._authService.register(credentials)
+        .pipe(
+          takeUntil(this._onDestroy$),
+          catchError((err:ProgressEvent | ErrorResponse) =>{
+            this._toast.error(err);
+
+            return EMPTY;
+          })
+        )
+        .subscribe(_ =>{
+          this._toast.sucess({ message:"You successfully created an account on PulseHub!!" });
+          this._router.navigateByUrl('/auth/login');
+        });
+
+        this.registerForm.reset();
+    }
 }

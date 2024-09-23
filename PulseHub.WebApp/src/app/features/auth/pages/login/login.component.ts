@@ -7,6 +7,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { ErrorResponse } from '../../../../core/models/responses/error-response.model';
 import { LoginRequest } from '../../../../core/models/requests/auth-request.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CustomValidators } from '../../../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class LoginComponent {
   public readonly loginForm = new FormGroup({
-    username:new FormControl('',[Validators.required,Validators.minLength(3)]),
+    username:new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20), CustomValidators.checkUsernameFormat ]),
     password:new FormControl('',[Validators.required])
   });
 

@@ -16,15 +16,16 @@ export class RegisterComponent implements OnDestroy {
   private readonly _onDestroy$ = new Subject<void>();
 
   public readonly registerForm = this._formBuilder.nonNullable.group({
-    firstname:['',[Validators.required]],
-    lastname:['',[Validators.required]],
-    username:['',[Validators.required,CustomValidators.usernameCheck]],
-    email:['',[Validators.required]],
-    password:['',[Validators.required,CustomValidators.passwordStrengthCheck,Validators.minLength(6)]],
-    confirmPassword:['',[Validators.required]]
-  },{
+    firstname:['',[ Validators.required, Validators.minLength(1) ]],
+    lastname:['',[ Validators.required, Validators.minLength(1) ]],
+    username:['',[ Validators.required, Validators.minLength(3), Validators.maxLength(20), CustomValidators.checkUsernameFormat ]],
+    email:['',[ Validators.required, Validators.email ]],
+    password:['',[ Validators.required,Validators.minLength(6), CustomValidators.checkPasswordStrength ]],
+    confirmPassword:['',[ Validators.required ]]
+  },
+  {
     // List of validators applied to the form group (global validators)
-    validators: [ CustomValidators.passwordMatch ] 
+    validators: [ CustomValidators.passwordMustMatch ] 
   });
 
   constructor(
@@ -55,8 +56,7 @@ export class RegisterComponent implements OnDestroy {
         .subscribe(_ =>{
           this._toast.sucess({ message:"You successfully created an account on PulseHub!!" });
           this._router.navigateByUrl('/auth/login');
+          this.registerForm.reset();
         });
-
-        this.registerForm.reset();
     }
 }

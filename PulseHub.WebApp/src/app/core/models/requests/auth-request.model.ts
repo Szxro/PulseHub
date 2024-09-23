@@ -10,3 +10,8 @@ export interface RegisterRequest{
     email:string;
     password:string;
 }
+
+export interface RegenerateTokenRequest{
+    token:string;
+    refreshToken:string;
+}

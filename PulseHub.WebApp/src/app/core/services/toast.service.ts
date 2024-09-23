@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorResponse } from '../models/responses/error-response.model';
-import { isErrorResponse } from '../utils/types-guards.util';
+import { isErrorResponse, isToastMessage } from '../utils/types-guards.util';
 import { ToastMessage } from '../models/others/toast-message.model';
 
 @Injectable({
@@ -11,20 +11,24 @@ export class ToastService {
     constructor(
         private readonly toastr:ToastrService
     ) { }
-
+    
+    error(error:ToastMessage):void;
     error(error:ProgressEvent | ErrorResponse):void;
     error(error:unknown):void{
-        if(error instanceof ProgressEvent){
-            this.showError("Can't connect to the server, try again later",'Error');
-            return;
+        switch(true){
+            case error instanceof ProgressEvent:
+                this.showError("Can't connect to the server, try again later",'Error');
+                break;
+            case isErrorResponse(error):
+                this.handleErrorResponse(error);
+                break;
+            case isToastMessage(error):
+                this.showError(error.message,error.title ?? 'Error');
+                break;
+            default:
+                this.showError('An unexpected error occurred','Error');
+                break;
         }
-
-        if(isErrorResponse(error)){
-            this.handleErrorResponse(error);
-            return;
-        }
-
-        this.showError("An unexpected error occurred", 'Error');
     }
 
     sucess({message,title = "Success!!"}:ToastMessage){

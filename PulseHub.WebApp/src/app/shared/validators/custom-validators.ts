@@ -1,7 +1,7 @@
 import { AbstractControl, ValidationErrors } from "@angular/forms";
 
 export class CustomValidators{
-    static passwordMatch(control:AbstractControl):ValidationErrors | null{
+    static passwordMustMatch(control:AbstractControl):ValidationErrors | null{
         const password = control.get('password');
         const confirmPassword = control.get('confirmPassword');
 
@@ -10,7 +10,7 @@ export class CustomValidators{
             : null;
     }
 
-    static passwordStrengthCheck(control:AbstractControl):ValidationErrors | null{
+    static checkPasswordStrength(control:AbstractControl):ValidationErrors | null{
         const value = control.value || '';
 
         const hasUpperCase = /[A-Z]/.test(value);
@@ -23,7 +23,7 @@ export class CustomValidators{
         return isValid ? null : { weakPassword: true }
     }
 
-    static usernameCheck(control:AbstractControl):ValidationErrors | null{
+    static checkUsernameFormat(control:AbstractControl):ValidationErrors | null{
         const value = control.value || '';
 
         const isValid = /^[a-zA-Z0-9_]+$/.test(value);

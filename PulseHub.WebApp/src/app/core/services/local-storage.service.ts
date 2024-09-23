@@ -38,7 +38,7 @@ export class LocalStorageService {
     }
   }
 
-  clear():void{
+  purge():void{
     localStorage.clear();
   }
 }

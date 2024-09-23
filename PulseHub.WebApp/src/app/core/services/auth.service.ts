@@ -2,7 +2,7 @@ import { Injectable,Inject } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { LoginRequest, RegisterRequest } from '../models/requests/auth-request.model';
+import { LoginRequest, RegenerateTokenRequest, RegisterRequest } from '../models/requests/auth-request.model';
 import { TokenResponse } from "../models/responses/token-response"
 import { SuccessResponse } from '../models/responses/success-response.model';
 import { API_URL_TOKEN } from '../tokens/api-url.token';
@@ -28,6 +28,14 @@ export class AuthService {
             catchError((err:HttpErrorResponse) => throwError(() => err.error))
         );
     };
+    
+    regenerateToken( request: RegenerateTokenRequest ):Observable<SuccessResponse<TokenResponse>>{
+        return this._http.post<SuccessResponse<TokenResponse>>(`${this._apiUrl}/refresh-token/regenerate`,request).pipe(
+            tap({
+                next: (response) => this._storageService.setItemByKey('token',response.data) 
+            })
+        );
+    }
 
     register(credentials:RegisterRequest):Observable<HttpResponse<Object>>{
         return this._http.post<HttpResponse<Object>>(
@@ -35,7 +43,7 @@ export class AuthService {
             ,credentials,
             { observe:'response' }
         ).pipe(
-            catchError((err:HttpErrorResponse) => throwError(() => err.error) )
+            catchError((err:HttpErrorResponse) => throwError(() => err.error))
         );
     }
 

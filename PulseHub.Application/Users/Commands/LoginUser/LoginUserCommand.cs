@@ -105,7 +105,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, TokenRe
             new TokenResponse
             {
                 Token = _tokenService.GenerateToken(foundUser),
-                RefreshedToken = refresh.Value,
+                RefreshToken = refresh.Value,
             });
     }
 

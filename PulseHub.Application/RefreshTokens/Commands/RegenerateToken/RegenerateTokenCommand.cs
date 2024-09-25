@@ -83,7 +83,7 @@ public class RegenerateTokenCommandHandler : ICommandHandler<RegenerateTokenComm
             new TokenResponse
             {
                 Token = _tokenService.GenerateToken(validRefreshToken.User),
-                RefreshedToken = newRefreshToken.Value
+                RefreshToken = newRefreshToken.Value
             });
     }
 

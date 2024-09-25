@@ -10,6 +10,8 @@ public class DomainEventDispatcherService : IDomainEventDispatcherService
     private readonly IPublisher _publisher;
     private readonly ILogger<DomainEventDispatcherService> _logger;
 
+    private readonly Random _random = new Random();
+
     public DomainEventDispatcherService(
         IPublisher publisher,
         ILogger<DomainEventDispatcherService> logger)
@@ -37,8 +39,10 @@ public class DomainEventDispatcherService : IDomainEventDispatcherService
         }
     }
 
-    public async Task RetryPublishDomainEvent(DomainEvent @event, int maxRetries = 3, CancellationToken cancellationToken = default)
+    public async Task RetryPublishDomainEvent(DomainEvent @event, BackOffOptions? options = default, CancellationToken cancellationToken = default)
     {
+       (int maxRetries,int initialDelay,int maxDelay,int timeMultiple) = options ?? new BackOffOptions();
+        
         int attempts = 0;
 
         while (attempts < maxRetries)
@@ -57,13 +61,20 @@ public class DomainEventDispatcherService : IDomainEventDispatcherService
             }
             catch
             {
+                double waitTime = Math.Min(initialDelay * Math.Pow(timeMultiple, attempts), maxDelay);
+
+                int delay = (int)Math.Floor(_random.NextDouble() * waitTime);
+
+                await Task.Delay(delay, cancellationToken);
+
                 attempts++;
 
                 _logger.LogError(
-                    "The domain event {eventName} failed to be published after retry count {attempts}/{maxRetries}",
+                    "The domain event {eventName} failed to be published after retry count {attempts}/{maxRetries} and {delay}ms",
                     @event.GetType().Name,
                     attempts,
-                    maxRetries);
+                    maxRetries,
+                    delay);
             }
         }
 

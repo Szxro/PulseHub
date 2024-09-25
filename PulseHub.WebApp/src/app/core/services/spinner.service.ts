@@ -6,14 +6,23 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SpinnerService {
     private readonly isLoadingSubject$ = new BehaviorSubject<boolean>(false);
+    // To handle multiple http requests
+    private readonly requestMap:Map<string,boolean> = new Map(); 
 
     public isLoading$ = this.isLoadingSubject$.asObservable();
 
-    show(){
-        this.isLoadingSubject$.next(true);
-    }
+    updateLoadingStatus(url:string,status:boolean){
+        if(!url){
+            throw Error('The request URL must be provided');
+        } 
 
-    hide(){
-        this.isLoadingSubject$.next(false);
+        if(status){
+            this.requestMap.set(url,status);
+        }else{
+            this.requestMap.delete(url);
+        }
+
+        // Updating the status base on the size of the map
+        this.isLoadingSubject$.next(this.requestMap.size > 0);
     }
 }

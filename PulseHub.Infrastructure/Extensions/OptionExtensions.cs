@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+
+using PulseHub.Infrastructure.Options.Aes;
 using PulseHub.Infrastructure.Options.Database;
 using PulseHub.Infrastructure.Options.Hashing;
 using PulseHub.Infrastructure.Options.Jwt;
@@ -24,6 +26,9 @@ public static partial class InfrastructureExtensions
 
         services.ConfigureOptions<JwtOptionsSetup>()
                 .AddFluentValidator<JwtOptions>();
+
+        services.ConfigureOptions<AesOptionSetup>()
+                .AddFluentValidator<AesOptions>();
 
         services.ConfigureOptions<JwtBearerOptionsSetup>();
 

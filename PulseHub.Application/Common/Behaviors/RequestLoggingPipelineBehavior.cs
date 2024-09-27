@@ -25,11 +25,11 @@ public class RequestLoggingPipelineBehavior<TRequest, TResponse>
     {
         string requestName = typeof(TRequest).Name;
 
-        string username = _currentUserService.GetCurrentUser() ?? "System";
+        (string? username,_) = _currentUserService.GetCurrentUser();
 
         _logger.LogInformation("Processing the request {request} requested by the user {user}",
             requestName,
-            username);
+            username ?? "System");
 
         TResponse response = await next();
 
@@ -37,7 +37,7 @@ public class RequestLoggingPipelineBehavior<TRequest, TResponse>
         {
             _logger.LogInformation("Completed the request {request} requested by the user {user}",
                 requestName,
-                username);
+                username ?? "System");
 
             return response;
         }

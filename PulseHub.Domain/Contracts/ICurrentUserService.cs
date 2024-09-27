@@ -2,5 +2,5 @@
 
 public interface ICurrentUserService
 {
-    string? GetCurrentUser();
+    (string? username, string? email) GetCurrentUser();
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.JsonWebTokens;
+
 using PulseHub.Domain.Contracts;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace PulseHub.Infrastructure.Services;
 
@@ -13,8 +15,12 @@ public class CurrentUserService : ICurrentUserService
         _httpContext = httpContext;
     }
 
-    public string? GetCurrentUser()
+    public (string? username, string? email) GetCurrentUser()
     {
-        return _httpContext.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Name)?.Value;
+        string? username = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Name)?.Value;
+
+        string? email = _httpContext?.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
+
+        return (username, email);
     }
 }

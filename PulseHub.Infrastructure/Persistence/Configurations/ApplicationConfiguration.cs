@@ -9,5 +9,7 @@ public class ApplicationConfiguration : IEntityTypeConfiguration<DomainApplicati
     public void Configure(EntityTypeBuilder<DomainApplication> builder)
     {
         builder.HasIndex(x => x.Name).IsUnique();
+
+        builder.HasIndex(x => x.ProviderApplicationId).IsUnique();
     }
 }

@@ -24,6 +24,9 @@ namespace PulseHub.Api.Controllers
 
         [HttpPost("create")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IResult> CreateApplication(CreateApplicationRequest request)
         {
             Result<ApplicationCreatedResponse> result = await _sender.Send(new CreateApplicationCommand(request.applicationName,

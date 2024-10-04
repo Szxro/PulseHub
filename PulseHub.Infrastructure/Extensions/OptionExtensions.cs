@@ -5,8 +5,9 @@ using PulseHub.Infrastructure.Options.Aes;
 using PulseHub.Infrastructure.Options.Database;
 using PulseHub.Infrastructure.Options.Hashing;
 using PulseHub.Infrastructure.Options.Jwt;
+using PulseHub.Infrastructure.Options.MediaStorage;
 using PulseHub.Infrastructure.Options.SmtpServer;
-using PulseHub.Infrastructure.Validators;
+using PulseHub.Infrastructure.Options.Validators;
 using PulseHub.SharedKernel.Contracts;
 
 namespace PulseHub.Infrastructure.Extensions;
@@ -29,6 +30,9 @@ public static partial class InfrastructureExtensions
 
         services.ConfigureOptions<AesOptionSetup>()
                 .AddFluentValidator<AesOptions>();
+
+        services.ConfigureOptions<MediaStorageOptionsSetup>()
+                .AddFluentValidator<MediaStorageOptions>();
 
         services.ConfigureOptions<JwtBearerOptionsSetup>();
 

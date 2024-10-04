@@ -29,6 +29,8 @@ public static partial class InfrastructureExtensions
 
         services.AddTransient<ITokenService, TokenService>();
 
+        services.AddTransient<IMediaCompressionService, MediaCompressionService>();
+
         return services;
     }
 }

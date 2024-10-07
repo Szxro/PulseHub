@@ -17,6 +17,8 @@ public static partial class InfrastructureExtensions
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
         services.AddScoped<IProviderRepository, ProviderRepository>();
+
+        services.AddScoped<IAvatarRepository, AvatarRepository>();
             
         return services;
     }

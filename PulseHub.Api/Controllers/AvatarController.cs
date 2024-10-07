@@ -22,6 +22,11 @@ public class AvatarController : ControllerBase
 
     [HttpPost("upload")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IResult> UploadAvatar(IFormFile formFile)
     {
         Result result = await _sender.Send(new CreateAvatarCommand(formFile));

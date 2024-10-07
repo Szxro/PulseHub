@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PulseHub.SharedKernel.Results;
 using PulseHub.Domain.Contracts;
 using PulseHub.Infrastructure.Options.MediaStorage;
 using PulseHub.SharedKernel;
@@ -28,11 +29,11 @@ public class MediaCompressionService : IMediaCompressionService
     }
 
     #pragma warning disable CA1416 // Validate platform compatibility (Windows 6.1+)
-    public Result<string> ImageCompressionAndSave(Stream imageStream,long fileLength,string extension,ImageQuality quality)
+    public Result<CompressionResult> ImageCompressionAndSave(Stream imageStream,long fileLength,string extension,ImageQuality quality)
     {
         if (fileLength > MaxImageSize || !AcceptedImageExtensions.Contains(extension))
         {
-            return Result<string>.Failure(Error.Validation(string.Empty, "Invalid file", "The file size or extension is not allowed."));
+            return Result<CompressionResult>.Failure(Error.Validation(string.Empty, "Invalid file", "The file size or extension is not allowed."));
         }
 
         // If the directory dont exists, create it. 
@@ -59,7 +60,7 @@ public class MediaCompressionService : IMediaCompressionService
 
                     if (imageEncoder is null)
                     {
-                        throw new Exception($"Could not find an appropriate encoder for the {extension} format.");
+                        return Result<CompressionResult>.Failure(Error.NotFound($"Could not find an appropriate encoder for the {extension} format."));
                     }
 
                     // Creates an encoder parameter base on the image quality enum provide (return: GUID)
@@ -75,7 +76,12 @@ public class MediaCompressionService : IMediaCompressionService
                     imageSource.Save(fileStream, imageEncoder, encodersParameters);
                     // Saving the compress image by buffering strategy (load the complete file into memory, great for small files)
 
-                    return Result<string>.Success(destinationPath);
+                    return Result<CompressionResult>.Success(new CompressionResult(filename,
+                                                                                   destinationPath,
+                                                                                   fileLength,
+                                                                                   imageSource.Size.Height,
+                                                                                   imageSource.Size.Width,
+                                                                                   imageSource.RawFormat.ToString()));
                 }
             }
         } catch (Exception ex)
@@ -85,7 +91,7 @@ public class MediaCompressionService : IMediaCompressionService
                 destinationPath,
                 ex.Message);
 
-            return Result<string>.Failure(Error.Validation(string.Empty, "Compression Error", "An error occurred while compressing the image"));
+            return Result<CompressionResult>.Failure(Error.Validation(string.Empty, "Compression Error", "An error occurred while compressing the image"));
         }
     }
 

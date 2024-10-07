@@ -60,7 +60,9 @@ public class MediaCompressionService : IMediaCompressionService
 
                     if (imageEncoder is null)
                     {
-                        return Result<CompressionResult>.Failure(Error.NotFound($"Could not find an appropriate encoder for the {extension} format."));
+                        _logger.LogError("Could not find an appropriate encoder for the {extension} format",extension);
+
+                        return Result<CompressionResult>.Failure(Error.Validation(string.Empty, "Unsupported format", "The image format is not supported."));
                     }
 
                     // Creates an encoder parameter base on the image quality enum provide (return: GUID)
@@ -91,7 +93,7 @@ public class MediaCompressionService : IMediaCompressionService
                 destinationPath,
                 ex.Message);
 
-            return Result<CompressionResult>.Failure(Error.Validation(string.Empty, "Compression Error", "An error occurred while compressing the image"));
+            throw;
         }
     }
 

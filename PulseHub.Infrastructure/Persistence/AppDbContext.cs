@@ -39,4 +39,6 @@ public class AppDbContext : DbContext
     public DbSet<EmailCode> EmailCode => Set<EmailCode>();  
 
     public DbSet<RefreshToken> RefreshToken => Set<RefreshToken>();
+
+    public DbSet<Avatar> Avatar => Set<Avatar>();
 }

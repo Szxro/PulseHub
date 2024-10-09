@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
 using PulseHub.Domain.Contracts;
 
@@ -23,20 +24,13 @@ public class ConnectionTrackerHubFilter : IHubFilter
 
         (string? currentUser, string? currentConnectionId) = GetCurrentUserAndConnectionId(context);
 
-        if (string.IsNullOrEmpty(currentUser) || string.IsNullOrEmpty(currentConnectionId))
-        {
-            _logger.LogWarning("The current user or connection Id is missing. User: {User}, Connection ID: {ConnectionId}",
-                              currentUser ?? "Unknown",
-                              currentConnectionId ?? "Unknown");
-            return response;
-        }
+        EnsureUserAndConnectionIdValid(currentUser, currentConnectionId);
 
         _trackerService.AddConnection(currentUser,currentConnectionId);
 
         _logger.LogInformation("New connection added to the storage with the user {User} and connectionId {connectionId}",
                                currentUser,
                                currentConnectionId);
-
         return response;
     }
 
@@ -45,14 +39,8 @@ public class ConnectionTrackerHubFilter : IHubFilter
         Task response = next(context, exception);
 
         (string? currentUser, string? currentConnectionId) = GetCurrentUserAndConnectionId(context);
-        
-        if (string.IsNullOrEmpty(currentUser) || string.IsNullOrEmpty(currentConnectionId))
-        {
-            _logger.LogWarning("The current user or connection Id is missing. User: {User}, Connection ID: {ConnectionId}",
-                              currentUser ?? "Unknown",
-                              currentConnectionId ?? "Unknown");
-            return response;
-        }
+
+        EnsureUserAndConnectionIdValid(currentUser, currentConnectionId);
 
         if (exception is not null)
         {
@@ -67,8 +55,19 @@ public class ConnectionTrackerHubFilter : IHubFilter
         _logger.LogInformation("The connection was remove from the storage with the user {User} and connectionId {connectionId}",
                                currentUser,
                                currentConnectionId);
-
         return response;
+    }
+
+    private void EnsureUserAndConnectionIdValid([NotNull] string? currentUser, [NotNull] string? connectionId)
+    {
+        if (string.IsNullOrEmpty(currentUser) || string.IsNullOrEmpty(connectionId))
+        {
+            _logger.LogWarning("The current user or connection Id is missing. User: {User}, Connection ID: {ConnectionId}",
+                              currentUser ?? "Unknown",
+                              connectionId ?? "Unknown");
+
+            throw new HubException("The current user or connection Id is invalid.");
+        }
     }
 
     private (string? currentUser, string? currentConnectionId) GetCurrentUserAndConnectionId(HubLifetimeContext context)

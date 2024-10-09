@@ -21,16 +21,13 @@ public class ConnectionTrackerHubFilter : IHubFilter
     {
         Task response = next(context);
 
-        string? currentUser = context.Context.User?.Claims.Where(x => x.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
-
-        string? currentConnectionId = context.Context.ConnectionId;
+        (string? currentUser, string? currentConnectionId) = GetCurrentUserAndConnectionId(context);
 
         if (string.IsNullOrEmpty(currentUser) || string.IsNullOrEmpty(currentConnectionId))
         {
             _logger.LogWarning("The current user or connection Id is missing. User: {User}, Connection ID: {ConnectionId}",
                               currentUser ?? "Unknown",
                               currentConnectionId ?? "Unknown");
-
             return response;
         }
 
@@ -47,16 +44,13 @@ public class ConnectionTrackerHubFilter : IHubFilter
     {
         Task response = next(context, exception);
 
-        string? currentUser = context.Context.User?.Claims.Where(x => x.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
-
-        string? currentConnectionId = context.Context.ConnectionId;
-
+        (string? currentUser, string? currentConnectionId) = GetCurrentUserAndConnectionId(context);
+        
         if (string.IsNullOrEmpty(currentUser) || string.IsNullOrEmpty(currentConnectionId))
         {
             _logger.LogWarning("The current user or connection Id is missing. User: {User}, Connection ID: {ConnectionId}",
                               currentUser ?? "Unknown",
                               currentConnectionId ?? "Unknown");
-
             return response;
         }
 
@@ -75,5 +69,14 @@ public class ConnectionTrackerHubFilter : IHubFilter
                                currentConnectionId);
 
         return response;
+    }
+
+    private (string? currentUser, string? currentConnectionId) GetCurrentUserAndConnectionId(HubLifetimeContext context)
+    {
+        string? currentUser = context.Context.User?.Claims.Where(x => x.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
+
+        string? currentConnectionId = context.Context.ConnectionId;
+
+        return (currentUser, currentConnectionId);
     }
 }

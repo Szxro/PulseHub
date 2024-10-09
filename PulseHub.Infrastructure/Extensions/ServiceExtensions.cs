@@ -12,6 +12,8 @@ public static partial class InfrastructureExtensions
         // Memory Cache is designed to be use as singleton
         services.AddSingleton<ICacheService, CacheService>();
 
+        services.AddSingleton<IUserConnectionTrackerService, UserConnectionTrackerService>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IDatabaseInitializerService, DatabaseInitializerService>();

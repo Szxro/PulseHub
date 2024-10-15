@@ -25,7 +25,7 @@ public class UserConnectionTrackerService : IUserConnectionTrackerService
             Monitor.Enter(_lock,ref isLockTaken); // To avoid race conditions
 
             // Critical zone
-            if (!_storage.ContainsKey(currentUser))
+            if (_storage.ContainsKey(currentUser))
             {
                 _logger.LogWarning(
                     "The connection tracker storage have already register the provide user {currentUser}!!!.",

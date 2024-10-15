@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using PulseHub.Api.Filters;
+using PulseHub.Api.Hubs;
 using PulseHub.Api.Middlewares;
 
 namespace PulseHub.Api.Extensions;
@@ -20,7 +21,6 @@ public static partial class ApiExtensions
 
             // Global options
             options.DisableImplicitFromServicesParameters = true;
-
 
             // Hub Filters
 
@@ -43,11 +43,10 @@ public static partial class ApiExtensions
         {
             options.AddPolicy("default", policy =>
             {
+                policy.SetIsOriginAllowed(origin => true);
                 policy.AllowAnyHeader();
                 policy.AllowAnyMethod();
-                policy.AllowAnyOrigin();
-                //policy.AllowCredentials(); (need to allow credentials when using signalR and need to define an origin)
-                policy.SetIsOriginAllowed(origin => true);
+                policy.AllowCredentials();
             });
         });
 

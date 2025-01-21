@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using PulseHub.Api.Filters;
-using PulseHub.Api.Hubs;
 using PulseHub.Api.Middlewares;
 
 namespace PulseHub.Api.Extensions;

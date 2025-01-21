@@ -50,7 +50,7 @@ public class CreateApplicationCommandHandler : ICommandHandler<CreateApplication
 
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email))
         {
-            return Result<ApplicationCreatedResponse>.Failure(Error.NotFound("The current user was not found!!"));
+            return Result<ApplicationCreatedResponse>.Failure(CurrentUserErrors.CurrentUserNotFound);
         }
 
         User? foundUser = await _userRepository.GetUserByUsernameAndEmailAsync(username, email);
@@ -78,11 +78,12 @@ public class CreateApplicationCommandHandler : ICommandHandler<CreateApplication
 
         string newAccessKey = _accessKeyService.GenerateUniqueAccessKey();
 
-        newApplication.AccessKeys.Add(new AccessKey()
-        {
-            EncryptedKey = _accessKeyService.EncryptAccessKey(newAccessKey),
-            IsActive = true,
-        });
+        newApplication.AccessKeys.Add(
+            new AccessKey()
+            {
+                EncryptedKey = _accessKeyService.EncryptAccessKey(newAccessKey),
+                IsActive = true,
+            });
 
         _unitOfWork.ChangeTrackerToUnchanged(newApplication.User);
 

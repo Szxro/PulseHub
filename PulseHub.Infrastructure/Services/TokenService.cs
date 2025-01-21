@@ -17,6 +17,7 @@ public class TokenService : ITokenService
     private readonly ILogger<TokenService> _logger;
 
     private static readonly string Algorithm = SecurityAlgorithms.HmacSha256;
+    private static readonly string JwtClaimEmailVerified = "is_email_verified";
 
     private readonly TokenValidationParameters _validationParameters;
 
@@ -91,6 +92,7 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name,user.Username),
             new Claim(JwtRegisteredClaimNames.Email,user.Email.Value),
+            new Claim(JwtClaimEmailVerified,user.EmailCodes.Any(x => x.IsVerified) ? "true" : "false")
         });
 
         return claims;
